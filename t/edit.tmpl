@@ -1,0 +1,44 @@
+<style>
+  html, body {
+  padding: 10px;
+  margin: 10px;
+  font-family: Menlo, monospace;
+  background-color: black;
+  color: white;
+  }
+
+  input,textarea {
+  margin: 5px;
+  padding: 5px;
+  font-family: Menlo, monospace;
+  background-color: black;
+  color: white;
+
+  }
+</style>
+<form action="/v1/postForm" METHOD=post>
+  <label for="title">Title</label>
+  <input type="text" name="title" id="title" value="{{.Blog.Title}}"><br>
+  <label for="slug">Slug</label>
+  <input type="text" name="slug" id="slug" value="{{.Blog.Slug}}"><br>
+  <div id="tags">
+    <label for="tag">Tag <a href="javascript: void(0)" onClick="newTag()">+</a></label>
+    <input type="text" name="tags[]" id="tag" value="{{.Tag}}">
+    {{range .Blog.Tags}}
+    <input type="text" name="tags[]" value="{{.Tag}}">
+    {{end}}
+  </div>
+  <br>
+  <script>
+    var newTag = function() {
+        var anchor = document.getElementById("tags")
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "tags[]"
+        anchor.appendChild(input);            
+    }
+  </script>
+  Text:<br>
+  <textarea name="text" style="width:80%; height: 50%">{{.Blog.Data}}</textarea><br>
+  <input type="submit" value="Submit">
+</form>

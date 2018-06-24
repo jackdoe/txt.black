@@ -1,0 +1,77 @@
+<!DOCTYPE html5>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+      padding: 0;
+      margin: 0;
+      font-family: Menlo, monospace;
+      background-color: black;
+      color: white;
+      }
+      a {
+          color: silver;
+      }
+      a:active {
+          color: silver;
+      }
+
+      a:visited {
+          color: gray;
+      }
+
+      .blog {
+      padding: 1em;
+      margin: 1em;
+      }
+      pre {
+      white-space: pre-wrap;       /* Since CSS 2.1 */
+      white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+      white-space: -pre-wrap;      /* Opera 4-6 */
+      white-space: -o-pre-wrap;    /* Opera 7 */
+      word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      font-family: Menlo, monospace
+      }
+      .intro {
+      padding: 1em;
+      }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="manifest" href="/assets/site.webmanifest">
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <title>txt.black</title>
+  </head>
+  <body>
+    <div class="intro">
+      <h3>Using <b>txt.black</b>:</h3>
+      <b>curl -XPOST --data-binary @file.txt -u user https://txt.black/v1/post/some-permalink-slug/Some%20Title/tag1,tag2</b><br><br>
+      It will automatically create user 'user' with the password you type in and post the content of file.txt at https://txt.black/~user/some-permalink-slug<br>
+      If you want to delete a post: <b>curl -XPOST -u user https://txt.black/v1/delete/some-permalink-slug'</b>, if <u>the slug</u> already exists, it will edit the post with the new content and tags.<br>
+      <br>
+      There is also /v1/api/post and /v1/api/delete and https://txt.black/post/~user to post or edit (https://txt.black/post/~user/slug for edit)<br>
+      To change your password use <b>curl -XPOST -d '{"new_password": "whatever password"}' -u your_username http://localhost:8080/v1/api/changePassword</b>
+      
+      <pre>
+$ curl -XPOST -d '{"title":"hi","slug":"yo","tags":["a","b","c"],"text":"asd"}' -u jack https://txt.black/v1/api/post
+$ curl -XPOST -d '{"slug":"yo"}' -u jack https://txt.black/v1/api/delete
+$ curl -XPOST -d '{"new_password": "whatever password"}' -u jack https://txt.black/v1/api/changePassword
+      </pre>
+      <br>
+      Report abuse to info@txt.black
+      <br>
+      Enjoy.
+    </div>
+    <hr style="width: 50%">
+    <div>
+     {{ range $index, $blog := .Blogs }}
+         {{ template "partial.blog.tmpl" $blog }}
+     {{ end }}
+    </div>
+  </body>
+</html>
