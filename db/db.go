@@ -1,8 +1,8 @@
 package db
 
 import (
-	. "github.com/jackdoe/prymr/txtblack/common"
-	. "github.com/jackdoe/prymr/txtblack/model"
+	. "github.com/jackdoe/txt.black/common"
+	. "github.com/jackdoe/txt.black/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
