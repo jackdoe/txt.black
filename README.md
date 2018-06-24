@@ -11,7 +11,7 @@ $ curl -XPOST --data-binary @blogpost.txt -u user https://txt.black/v1/post/some
  
 $ curl -XPOST -d '{"title":"hi","slug":"yo","tags":["a","b","c"],"text":"asd"}' -u jack https://txt.black/v1/api/post
 $ curl -XPOST -d '{"slug":"yo"}' -u jack https://txt.black/v1/api/delete
-$ curl -XPOST -d '{"new_password": "whatever password"}' -u jack http://localhost:8080/v1/api/changePassword
+$ curl -XPOST -d '{"new_password": "whatever password"}' -u jack https://txt.black/v1/api/changePassword
 
 ```
 ## how to run it
