@@ -49,7 +49,7 @@
   </head>
   <body>
     <div class="intro">
-      <h3>Using <b>txt.black</b>:</h3>
+      <h3>Using <b><a href="https://txt.black">txt.black</a></b>:</h3>
       <b>curl -XPOST --data-binary @file.txt -u user https://txt.black/v1/post/some-permalink-slug/Some%20Title/tag1,tag2</b><br><br>
       It will automatically create user 'user' with the password you type in and post the content of file.txt at https://txt.black/~user/some-permalink-slug<br>
       If you want to delete a post: <b>curl -XPOST -u user https://txt.black/v1/delete/some-permalink-slug'</b>, if <u>the slug</u> already exists, it will edit the post with the new content and tags.<br>
@@ -63,7 +63,7 @@ $ curl -XPOST -d '{"slug":"yo"}' -u jack https://txt.black/v1/api/delete
 $ curl -XPOST -d '{"new_password": "whatever password"}' -u jack https://txt.black/v1/api/changePassword
       </pre>
       <br>
-      Report abuse to info@txt.black
+      Report abuse to info@txt.black, if you want to contribute fork it from <a href="https://github.com/jackdoe/txt.black">https://github.com/jackdoe/txt.black</a>
       <br>
       Enjoy.
     </div>
