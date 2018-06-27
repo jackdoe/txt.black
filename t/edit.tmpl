@@ -1,22 +1,11 @@
-<style>
-  html, body {
-  padding: 10px;
-  margin: 10px;
-  font-family: Menlo, monospace;
-  background-color: black;
-  color: white;
-  }
-
-  input,textarea {
-  margin: 5px;
-  padding: 5px;
-  font-family: Menlo, monospace;
-  background-color: black;
-  color: white;
-
-  }
-</style>
-<form action="/v1/postForm" METHOD=post>
+<!DOCTYPE html5>
+<html>
+  <head>
+    {{ template "head.tmpl" . }}
+    <title>post</title>
+  </head>
+<body>  
+<form action="/v1/postForm" METHOD=post class="blog">
   posting as <b>{{.User.UserName}}</b><br>
   <label for="title">Title</label>
   <input type="text" name="title" id="title" value="{{.Blog.Title}}"><br>
@@ -43,3 +32,6 @@
   <textarea name="text" style="width:80%; height: 50%">{{.Blog.Data}}</textarea><br>
   <input type="submit" value="Submit">
 </form>
+</body>
+
+</html>
