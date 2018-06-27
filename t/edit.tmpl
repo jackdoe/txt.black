@@ -17,6 +17,7 @@
   }
 </style>
 <form action="/v1/postForm" METHOD=post>
+  posting as <b>{{.User.UserName}}</b><br>
   <label for="title">Title</label>
   <input type="text" name="title" id="title" value="{{.Blog.Title}}"><br>
   <label for="slug">Slug</label>

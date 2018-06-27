@@ -65,24 +65,6 @@ func main() {
 		})
 	})
 
-	r.GET("/post/~:user/:slug", func(c *gin.Context) {
-		var blog Blog
-		var user User
-		db.Find(&user, "user_name = ?", c.Param("user"))
-		if user.ID != 0 {
-			var blogs []Blog
-			db.Preload("User").Preload("Tags").Order("id desc").Where("user_id = ? AND slug=?", user.ID, c.Param("slug")).Find(&blogs)
-			if len(blogs) > 0 {
-				blog = blogs[0]
-			}
-		}
-		blog.Slug = sanitize(c.Param("slug"))
-
-		c.HTML(http.StatusOK, "edit.tmpl", map[string]interface{}{
-			"Blog": blog,
-		})
-	})
-
 	findBlog := func(c *gin.Context) {
 		slug := c.Param("slug")
 		var user User
@@ -137,7 +119,7 @@ func main() {
 
 	authorized := r.Group("/v1", auth.BasicAuth(func(c *gin.Context, realm, userName, password string) auth.AuthResult {
 		if len(userName) == 0 {
-			return auth.AuthResult{Success: false, Text: "need user and password"}
+			return auth.AuthResult{Success: false, Text: "need user and password, if the user does not exist it will be created on the fly"}
 		}
 
 		if len(password) < MIN_PASS_LEN {
@@ -145,7 +127,7 @@ func main() {
 		}
 
 		userName = sanitize(userName)
-		badName := "root" == userName || "user" == userName || "admin" == userName || "webmaster" == userName || "administrator" == userName
+		badName := "root" == userName || "user" == userName || "admin" == userName || "webmaster" == userName || "administrator" == userName || len(userName) < 3
 		if badName {
 			return auth.AuthResult{Success: false, Text: "this username is not allowed"}
 		}
@@ -167,7 +149,7 @@ func main() {
 		} else {
 			return auth.AuthResult{Success: false, Text: "Wrong username or password, if you are creating new user, then this use alrady exists, please pick another one"}
 		}
-		return auth.AuthResult{Success: false}
+		return auth.AuthResult{Success: false, Text: "Please specify username and password"}
 	}))
 
 	create := func(user *User, input *BlogInput) (*Blog, error) {
@@ -246,6 +228,7 @@ func main() {
 		}
 		c.Redirect(http.StatusFound, fmt.Sprintf("/~%s/%s", user.UserName, blog.Slug))
 	})
+
 	authorized.POST("/api/post", func(c *gin.Context) {
 		var json BlogInput
 		if err := c.ShouldBindJSON(&json); err != nil {
@@ -260,6 +243,27 @@ func main() {
 		}
 		c.JSON(http.StatusOK, gin.H{"success": true, "blog.id": blog.ID, "slug": blog.Slug})
 	})
+
+	formWithOrWithotSlug := func(c *gin.Context) {
+		var blog Blog
+		user := c.MustGet("user").(*User)
+		if user.ID != 0 {
+			var blogs []Blog
+			db.Preload("User").Preload("Tags").Order("id desc").Where("user_id = ? AND slug=?", user.ID, c.Param("slug")).Find(&blogs)
+			if len(blogs) > 0 {
+				blog = blogs[0]
+			}
+		}
+		blog.Slug = sanitize(c.Param("slug"))
+
+		c.HTML(http.StatusOK, "edit.tmpl", map[string]interface{}{
+			"Blog": blog,
+			"User": user,
+		})
+	}
+
+	authorized.GET("/form/:slug", formWithOrWithotSlug)
+	authorized.GET("/form", formWithOrWithotSlug)
 
 	authorized.POST("/api/changePassword", func(c *gin.Context) {
 		var json ChangePasswordInput
