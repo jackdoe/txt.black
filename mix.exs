@@ -12,7 +12,7 @@ defmodule Txt.MixProject do
   end
 
   def application do
-    [applications: [:logger, :plug_cowboy], mod: {Txt.Application, []}]
+    [applications: [:logger, :plug_cowboy, :pbkdf2_elixir], mod: {Txt.Application, []}]
   end
 
   defp deps do

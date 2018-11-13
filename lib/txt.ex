@@ -133,12 +133,14 @@ defmodule Txt.Store do
 end
 
 defmodule Txt.Util do
+  import Pbkdf2
+
   def hash_password(p) do
-    Pbkdf2.hash_pwd_salt(p)
+    hash_pwd_salt(p)
   end
 
   def check_password(pass, hash) do
-    Pbkdf2.verify_pass(pass, hash)
+    verify_pass(pass, hash)
   end
 
   def create_user(user, pass) do

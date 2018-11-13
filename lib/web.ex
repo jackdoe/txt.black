@@ -1,5 +1,6 @@
 defmodule Txt.Router do
   use Plug.Router
+
   plug(Plug.Parsers, parsers: [:urlencoded, :multipart])
   plug(Plug.Logger, log: :debug)
   plug(:match)
