@@ -54,7 +54,11 @@ defmodule Txt.HTML do
   end
 
   def show(%Txt.Post{user: user, title: title, text: text, slug: slug, tags: tags, stamp: stamp}) do
-    tags = tags |> Enum.map(fn x -> "<small>##{escape(x)}</small>" end) |> Enum.join(" ")
+    tags =
+      tags
+      |> Enum.filter(fn x -> String.length(x) > 0 end)
+      |> Enum.map(fn x -> "<small>##{escape(x)}</small>" end)
+      |> Enum.join(" ")
 
     """
     <h3>
