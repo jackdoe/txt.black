@@ -86,6 +86,7 @@ defmodule Txt.Router do
 
   get "/~:user/:slug" do
     IO.inspect(conn)
+    conn = Plug.Conn.put_resp_header(conn, "content-type", "text/html")
 
     case Txt.Store.lookup({user, slug}) do
       :notfound ->
