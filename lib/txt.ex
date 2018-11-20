@@ -88,7 +88,8 @@ defmodule Txt.Store do
           [{{{:"$1", :"$2"}, :"$3"}, [{:==, :"$1", user}], [:"$3"]}]
       end
 
-    {:reply, :dets.select(post_table, fun), {user_table, post_table}}
+    {:reply, Enum.sort(:dets.select(post_table, fun), fn a, b -> b.stamp >= a.stamp end),
+     {user_table, post_table}}
   end
 
   def handle_call(
