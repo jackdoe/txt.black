@@ -122,4 +122,5 @@ This year I will try to unlearn everything, and think about those
 problems from a different angle.
 
 ---
-github.com/jackdoe @1546954827
+github.com/jackdoe Tue Jan  8 13:40:27 UTC 2019
+

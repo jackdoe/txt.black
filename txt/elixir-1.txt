@@ -29,4 +29,5 @@ anyway, day 1 complete, check out the &quot;lets see how that looks&quot; code a
 
 
 ---
-github.com/jackdoe @1542122599
+github.com/jackdoe Tue Nov 14 12:40:20 UTC 2018
+
