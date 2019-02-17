@@ -40,13 +40,18 @@ say we have the following request distribution:
 90% of the requests take 10ms
 5%  take 200ms
 5%  take 2000ms
-and each service has queue of 10 possible slots, and only 1 thread [oversimplification]
+and each service has queue of 10 possible slots, and only 1 thread
+[oversimplification]
 
 And lets imagine that those times are taking form the top load
 balancer's point of view. Also for simplicity lets pick a request
 path:
 
-load balancer -> webserver -> shoppingCartService ->; discountService ->; campaignManager
+load balancer
+    -> webserver
+        -> shoppingCartService
+            -> discountService
+               -> campaignManager
 
 The top load balancer sees something like "GET /cart" with some cookie
 and for simplicity lets imagine the cookie just contains unencrypted
