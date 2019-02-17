@@ -14,7 +14,8 @@ just for fun and practice
   manipulate strings in the language
 
 the more i use elixir the more i like it
-still sometimes i get confused, but the docs are great and they help me a lot
+still sometimes i get confused, but the docs are great and they help
+me a lot
 
 * distillery is particularly nice
 * ets functions are weird: [{{{:"$1", :"$2"},:"$3"}, [], [:"$3"]}]
