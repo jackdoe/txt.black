@@ -5,13 +5,17 @@ published https://hexdocs.pm/vowpal_fleet/VowpalFleet.html
 to create cluster of wabbits using Swarm
 
 notes:
-* the combination of dynamic and static supervisors is very weird, in many cases i cant visualize the supervised tree
+* the combination of dynamic and static supervisors is very weird, in
+  many cases i cant visualize the supervised tree
 
 * still dont know how to properly test multi cluster setup
-* i am still confused sometimes by genserver and supervisor way to pass params
-* tried some fancy process managers (like porcelain) but System.cmd seems to be the best for me
+* i am still confused sometimes by genserver and supervisor way to
+  pass params
+* tried some fancy process managers (like porcelain) but System.cmd
+  seems to be the best for me
 * the pattern of wait-for-pid-file-to-appear seems to be working fine
-* still not sure what will happen with hot-code-reload for the swarm handoff state
+* still not sure what will happen with hot-code-reload for the swarm
+  handoff state
 
 
 next:
