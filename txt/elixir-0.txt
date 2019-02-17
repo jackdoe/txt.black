@@ -1,11 +1,13 @@
 so, i got excited about elixir
 i havent done any ruby in like 5 years, and erlang in even more time
 
-so i jumped head first into the language and i have to say https://elixirschool.com/en/ is awesome
-and alchemist.el plus elixir-mode have been just joy to use.
+so i jumped head first into the language and i have to say
+https://elixirschool.com/en/ is awesome and alchemist.el plus
+elixir-mode have been just joy to use.
 
-overall after 5-6 hours with the docs and some videos, those are my notes, but so far i have to say:
-damn i wish i started learning it sooner
+overall after 5-6 hours with the docs and some videos, those are my
+notes, but so far i have to say: damn i wish i started learning it
+sooner
 
 
 (completely unstructured set of notes follows)
@@ -13,10 +15,13 @@ damn i wish i started learning it sooner
 # some notes
 
 * implicit return, there is no actual return keyword
-* ruby 1.9+ symbols and atoms are almost with the same syntax, but f([:abc, 1]) is not the same as f(abc: 1)
+* ruby 1.9+ symbols and atoms are almost with the same syntax, but
+  f([:abc, 1]) is not the same as f(abc: 1)
 * regexes are simply ~r{\n}
-* default values to functions are passed with \\, def x(arg \\ 123) [ really cool for testing ]
-* casting is a bit different (when they say casting) it is more like mobexify
+* default values to functions are passed with \\, def x(arg \\ 123) [
+  really cool for testing ]
+* casting is a bit different (when they say casting) it is more like
+  mobexify
 * immutability is worse than clojure where vectors and maps are trees
 
   prepending is find
@@ -38,13 +43,16 @@ damn i wish i started learning it sooner
    :ok
    iex(5)> GenServer.call(Pizzaservice, {:pizza, "Tonno"})
    *DBG* 'Elixir.Pizzaservice' got call {pizza,<<"Tonno">>} from <0.101.0>
-   *DBG* 'Elixir.Pizzaservice' sent {ok,#{msg => <<"enjoy!">>,price => 10.5}} to <0.101.0>, new state []
+   *DBG* 'Elixir.Pizzaservice' sent {ok,#{msg => <<"enjoy!">>,price =>
+    10.5}} to <0.101.0>, new state []
    {:ok, %{msg: "enjoy!", price: 10.5}}
 
 * touples and maps are sometimes confusing
-{:ready, {:ok, :second}} is touple of touples, not the same as {:ready, %{ok: :second}}
+{:ready, {:ok, :second}} is touple of touples, not the same as
+{:ready, %{ok: :second}}
 iex(6)> {:ready, {:ok, :second}} = {:ready, %{ok: :second}}
-** (MatchError) no match of right hand side value: {:ready, %{ok: :second}}
+** (MatchError) no match of right hand side value: {:ready, %{ok:
+   :second}}
     (stdlib) erl_eval.erl:453: :erl_eval.expr/5
 
   def handle_call(%{pizza: pizza}, sender, current_state) do
@@ -59,7 +67,8 @@ iex(6)> {:ready, {:ok, :second}} = {:ready, %{ok: :second}}
 * quote do
   iex(4)> quote do: if 1 == 1, then: 1, else: 2
   {:if, [context: Elixir, import: Kernel],
-   [{:==, [context: Elixir, import: Kernel], [1, 1]}, [then: 1, else: 2]]}
+   [{:==, [context: Elixir, import: Kernel], [1, 1]}, [then: 1, else:
+   2]]}
 
 * [1,2,3] ++ [1] or [1,2,3] -- [1]
 
@@ -120,11 +129,15 @@ this is soo cool
       |> Enum.filter(fn x -> String.length(x) > 10 end)
       |> Enum.map(&String.downcase/1)
       !> IO.inspect()
-      |> Enum.reduce(%{}, fn (x, acc) -> Map.merge(acc, Map.new([{x, 1}]), fn (_k, a,b) -> a+b end) end)
+      |> Enum.reduce(%{},
+          fn (x, acc) ->
+             Map.merge(acc,
+               Map.new([{x, 1}]), fn (_k, a,b) -> a+b end) end)
   end
   # FIXME: should be better way to do map[key] += 1
 
-  iex(23)> Enum.reduce([1,2,3,1,1], %{}, fn (x, acc) -> Map.merge(acc, Map.new([{x, 1}]), fn (_k, a,b) -> a+b end) end)
+  iex(23)> Enum.reduce([1,2,3,1,1], %{}, fn (x, acc) -> Map.merge(acc,
+  Map.new([{x, 1}]), fn (_k, a,b) -> a+b end) end)
 
 * IO.inspect is cool
   takes x, console logs it and returns x
@@ -142,7 +155,8 @@ this is soo cool
    |> Enum.map(fn x -> %{age: x[:age] + 1})
    |> filter(5)
 
-   basic pipelining, but |> makes the previous value be implicit first argument to the current line
+   basic pipelining, but |> makes the previous value be implicit first
+   argument to the current line:
    [1,2,3]
    |> Enum.map(&IO.inspect) -> Enum.map([1,2,3], &IO.inspect)
 
@@ -159,7 +173,8 @@ when you compose 2 pieces of computations, they have the same type
 
 [1] + [2] = [1,2]
 binding operator in haskell specifies the way to compose those computations
-in case of Ecto.changeset and Multi it is the |> operator, but can be more complicated
+in case of Ecto.changeset and Multi it is the |> operator, but can be
+more complicated
 
 
 ## genserver
@@ -197,7 +212,8 @@ Agent.get() Agent.update, Agent.cast() Agent.get_and_update()
 * spawn vs spawn_link, start vs start_link
 _link links it to the *calling* process
 if spawned process crashes, calling process crashes too
-so supervision tree takes care of who watches who and how many times something crashes
+so supervision tree takes care of who watches who and how many times
+something crashes
 
 supervisors trap exists
 
@@ -277,7 +293,8 @@ Application.get_env(:namespace, :key)
 
 
 ## projects to build
-* rewrite txt.black to use elixir+PETS (since i have only 1 instance anyway), or maybe raft + pets
+* rewrite txt.black to use elixir+PETS (since i have only 1 instance
+  anyway), or maybe raft + pets
 * create small and simple searchable log (like rochefort)
 * vowpal wabbit manager
 * vowpal wabbit model reader in pure elixir
