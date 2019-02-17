@@ -54,8 +54,8 @@ session id. What features can it use to guess if the request will take
 2 seconds or 10ms? If it sends 10 requests taking 10ms each to a
 webserver that is completely occupied by handling 2second request, it
 will of course enqueue them, and then those requests will have to wait
-2 seconds to be executed. You can say: &quot;wait wait wait, why is it
-queueing work which it can not execute? why not return 503 when busy&quot;,
+2 seconds to be executed. You can say: "wait wait wait, why is it
+queueing work which it can not execute? why not return 503 when bus",
 but remember that in our case most of the requests are handled within
 10ms, and some of them are async, so we can of course queue them so we
 can actually do process another request while waiting.
@@ -83,8 +83,8 @@ If you think about it it is extremely difficult problem, in the modern
 free-for-all-stop-the-world-garbage-collection-cross-dc-sdn crazy world,
 to predict if the time of a request with any practical certainty.
 
-Some of the solutions we end up doing is we create &quot;batch&quot; clusters for
-&quot;slower&quot; requests, limit the queues with some super conservative numbers,
+Some of the solutions we end up doing is we create "batch" clusters for
+"slower" requests, limit the queues with some super conservative numbers,
 retries strategies do upper confidence bound on picking the next host, etc.
 
 
@@ -121,6 +121,15 @@ production yet, but I hope I can try it out at larger scale.
 This year I will try to unlearn everything, and think about those
 problems from a different angle.
 
+
+EDIT:
+
+I started investigating the concept more and made
+https://github.com/jackdoe/back-to-back to play with it,
+so far it looks really nice
+
+
 ---
 github.com/jackdoe Tue Jan  8 13:40:27 UTC 2019
+             edit: Sun Feb 17 15:18:58 UTC 2019
 
