@@ -286,4 +286,4 @@ Application.get_env(:namespace, :key)
 more to come, i am still jet lagged
 
 ---
-github.com/jackdoe @1542121943
+github.com/jackdoe Tue Nov 13 15:12:23 UTC 2018
