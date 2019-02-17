@@ -1,0 +1,55 @@
+borislav nikolov aka jackdoe
+
+few things about me:
+
+at the moment of writing this i am 35 yo and have been a developer for
+19 years, working since i was 16.
+
+i love leatherworking, now i have 10m^2 of leather to do stuff with.
+also started using the nickname jackdoe because johndoe was taken
+haha
+
+
+some of my projects (in no particular order)
+https://txt.black/~jack
+  my blog (i finally have a blog)
+  finally realized that directory of text files
+  with 'autoindex on' is good enough.
+
+https://github.com/jackdoe/scrambled-eggs
+  rejection of the modern world
+  (also https://scrambled-eggs.xyz)
+
+https://github.com/jackdoe/back-to-back
+  investigating queues as transport instead of push load balancers
+  (traditional http soa)
+
+https://github.com/jackdoe/juun
+  machine learning + zsh history
+
+https://github.com/jackdoe/rochefort
+  poor man's kafka (plus in-place mutations and search)
+
+https://github.com/jackdoe/dhcpd
+  pcap based dhcp server
+
+https://github.com/jackdoe/ra
+  pcap based ra server
+
+https://github.com/jackdoe/zearch
+  some mmaped inverted indexes
+
+https://github.com/jackdoe/roar
+  watch and execute
+
+https://booknomads.com
+  wanted to find some friends through books
+
+https://github.com/jackdoe/frankenworms
+  c elegans connectome into a plane (weird)
+
+some more, you can check them out at
+https://github.com/jackdoe?tab=repositories
+
+---
+github.com/jackdoe Sun Feb 17 15:01:11 UTC 2019
