@@ -1,0 +1,289 @@
+so, i got excited about elixir
+i havent done any ruby in like 5 years, and erlang in even more time
+
+so i jumped head first into the language and i have to say https://elixirschool.com/en/ is awesome
+and alchemist.el plus elixir-mode have been just joy to use.
+
+overall after 5-6 hours with the docs and some videos, those are my notes, but so far i have to say:
+damn i wish i started learning it sooner
+
+
+(completely unstructured set of notes follows)
+
+# some notes
+
+* implicit return, there is no actual return keyword
+* ruby 1.9+ symbols and atoms are almost with the same syntax, but f([:abc, 1]) is not the same as f(abc: 1)
+* regexes are simply ~r{\n}
+* default values to functions are passed with \\, def x(arg \\ 123) [ really cool for testing ]
+* casting is a bit different (when they say casting) it is more like mobexify
+* immutability is worse than clojure where vectors and maps are trees
+
+  prepending is find
+  [x]-\
+       |-- [1] -> [2] -> [3]
+  appending has to copy
+  [x]->[1]->[2]->[3]--+
+                      |
+                     [4]
+
+  have no idea how maps are implemented yet
+* sticky users plus gen servers work really nice
+* persist only as last resort (easier said than done)
+* [1 | [1,2,3]] -> [1,1,2,3] very common and nice to read
+* info (iex i :foo) is nice
+* defprotocol, defimpl, @behavior
+* :observer.start - cool monitoring, also :sys.trace
+   iex(4)> :sys.trace Pizzaservice, true
+   :ok
+   iex(5)> GenServer.call(Pizzaservice, {:pizza, "Tonno"})
+   *DBG* 'Elixir.Pizzaservice' got call {pizza,<<"Tonno">>} from <0.101.0>
+   *DBG* 'Elixir.Pizzaservice' sent {ok,#{msg => <<"enjoy!">>,price => 10.5}} to <0.101.0>, new state []
+   {:ok, %{msg: "enjoy!", price: 10.5}}
+
+* touples and maps are sometimes confusing
+{:ready, {:ok, :second}} is touple of touples, not the same as {:ready, %{ok: :second}}
+iex(6)> {:ready, {:ok, :second}} = {:ready, %{ok: :second}}
+** (MatchError) no match of right hand side value: {:ready, %{ok: :second}}
+    (stdlib) erl_eval.erl:453: :erl_eval.expr/5
+
+  def handle_call(%{pizza: pizza}, sender, current_state) do
+    {:reply, order(pizza), current_state}
+  end
+
+  def handle_call({:pizza, pizza}, sender, current_state) do
+    {:reply, order(pizza), current_state}
+  end
+
+* quote do: {1,2,3} -> {:{}, [], [1, 2, 3]}
+* quote do
+  iex(4)> quote do: if 1 == 1, then: 1, else: 2
+  {:if, [context: Elixir, import: Kernel],
+   [{:==, [context: Elixir, import: Kernel], [1, 1]}, [then: 1, else: 2]]}
+
+* [1,2,3] ++ [1] or [1,2,3] -- [1]
+
+## pattern matching
+this is soo cool
+
+* funcitons are matched in declartion order
+   def something([:name, "Alice"]) do
+       IO.puts "welcome alice"
+   end
+   def something([:name, "John"]) do
+       IO.puts "welcome John"
+   end
+
+   def something([:name, anybody]) do
+       IO.puts "welcome -- unknown"
+   end
+
+   def something(list) do
+       IO.puts ".. anything else"
+   end
+
+   a = 1
+   b = 2
+   c = 3
+   [a,b,[c]] = [1,2,[3]]
+
+* splitting
+
+  first element and tail of list, another example
+
+  def reverse(list) do
+      reverse([], list)
+  end
+  def reverse([], reversed) do
+      reversed
+  end
+  def reverse([head | tail], reversed) do
+      reverse(tail, [head | reversed])
+  end
+
+  def sum(list) do
+      sum(0, list)
+  end
+  def sum(n, [head |tail]) do
+      sum(head + n, tail)
+  end
+
+## pipes, implicit first parameters
+
+* Enum/Stream is king
+* easy to compose
+* easy to read
+  def parse(path)
+    path
+      |> File.read!()
+      |> String.split(~r{\n})
+      |> Enum.filter(fn x -> String.length(x) > 10 end)
+      |> Enum.map(&String.downcase/1)
+      !> IO.inspect()
+      |> Enum.reduce(%{}, fn (x, acc) -> Map.merge(acc, Map.new([{x, 1}]), fn (_k, a,b) -> a+b end) end)
+  end
+  # FIXME: should be better way to do map[key] += 1
+
+  iex(23)> Enum.reduce([1,2,3,1,1], %{}, fn (x, acc) -> Map.merge(acc, Map.new([{x, 1}]), fn (_k, a,b) -> a+b end) end)
+
+* IO.inspect is cool
+  takes x, console logs it and returns x
+
+## composable things returning composable thing
+
+   def filter(list, age)
+       list
+       |> Enum.filter(fn x -> x[:age] > 0 end)
+       |> Enum.filter(fn x -> x[:age] < age end)
+   end
+
+   [%{age: 5}, %{age: 6}, %{age: 7}]
+   |> filter(1)
+   |> Enum.map(fn x -> %{age: x[:age] + 1})
+   |> filter(5)
+
+   basic pipelining, but |> makes the previous value be implicit first argument to the current line
+   [1,2,3]
+   |> Enum.map(&IO.inspect) -> Enum.map([1,2,3], &IO.inspect)
+
+
+## mix
+* mix help new
+* mix new x --sup [ supervisor ]
+
+## monads
+[non category theory explain]
+pattern where you have a piece of computation
+and you can copmose them through operation that
+when you compose 2 pieces of computations, they have the same type
+
+[1] + [2] = [1,2]
+binding operator in haskell specifies the way to compose those computations
+in case of Ecto.changeset and Multi it is the |> operator, but can be more complicated
+
+
+## genserver
+* GenServer.start_link, __MODULE__, state, options (name: atom) o
+* GenServer.call(atom or pid, .. message )
+* each process has mailbox, so you can send messages (pid by default)
+* supervisors dont give you access to pid
+* cast or call
+* cast {:noreply, new state}
+* call takes 3 arguments, tuple, from, state
+  returns 3 tuple, {:reply, value, new_state}
+
+* can be named instead of pids, super cool
+    @name = __MODULE__
+
+    GenServer.start(__MODULE__, :ok, name: @name)
+    def set(k) do
+      GenServer.cast(@name, {:set, k, v})
+    end
+* instead of tracking pids
+
+    GenServer.start(__MODULE__, :ok, [])
+    def set(pid, k) do
+      GenServer.cast(pid, {:set, k, v})
+    end
+
+elixir agents - storing state
+elixir tasks - work
+
+Agent.get() Agent.update, Agent.cast() Agent.get_and_update()
+
+* global registry
+    GenServer.start(__MODULE__, :ok, name: {global: __MODULE__})
+
+* spawn vs spawn_link, start vs start_link
+_link links it to the *calling* process
+if spawned process crashes, calling process crashes too
+so supervision tree takes care of who watches who and how many times something crashes
+
+supervisors trap exists
+
+## behaviour (like interfaces)
+defmodule Validator do
+  @callback is_valid(map) ::
+              {:ok, map}
+              | {:error, String.t()}
+end
+
+defmodule SimpleValidator do
+  @behaviour Validator
+  def is_valid(_x) do
+    {:error, "no"}
+  end
+end
+
+defmodule Validate do
+  def validate(item, validators) do
+    validators
+    |> Enum.each(fn v -> IO.inspect(v.is_valid(item)) end)
+  end
+end
+
+Validate.validate(:a, [SimpleValidator, SimpleValidator])
+{:error, "no"}
+{:error, "no"}
+:ok
+
+## structs
+special maps with defined keys and default values
+
+defmodule Rect do
+  defstruct w: 0, h: 0
+
+  def area(%{w: w, h: h}) do
+    w * h
+  end
+end
+
+r = %Rect{w: 10, h: 20}
+|> Rect.area
+
+Rect.area(r)
+
+## comprehensions
+iex> list = [1, 2, 3, 4, 5]
+iex> for x <- list, do: x*x
+
+iex> for {_key, val} <- [one: 1, two: 2, three: 3], do: val
+[1, 2, 3]
+
+iex> for {k, v} <- %{"a" => "A", "b" => "B"}, do: {k, v}
+[{"a", "A"}, {"b", "B"}]
+
+iex> for <<c <- "hello">>, do: <<c>>
+["h", "e", "l", "l", "o"]
+
+## configuration, mix config
+config :namespace. key: [1,2,3]
+Application.get_env(:namespace, :key)
+
+## todo - things to check out (more)
+* Ecto.*
+* Ecto.Changeset for validation
+* Ecto.Repo for db
+* check out The Zen Of Erlang
+* more macros
+* hot code replacement
+* kernel specialforms investigate
+* get_in and put_in in-depth
+* phoenix
+* @spec
+* protocols and behaviors
+
+
+
+
+## projects to build
+* rewrite txt.black to use elixir+PETS (since i have only 1 instance anyway), or maybe raft + pets
+* create small and simple searchable log (like rochefort)
+* vowpal wabbit manager
+* vowpal wabbit model reader in pure elixir
+* ++
+
+more to come, i am still jet lagged
+
+---
+github.com/jackdoe @1542121943

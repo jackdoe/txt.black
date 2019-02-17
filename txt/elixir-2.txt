@@ -1,0 +1,29 @@
+elixir day 2
+
+
+published https://hex.pm/packages/vowpal_client
+
+notes:
+
+* IO still feels weird to me, especially when GenServer has to
+  `receive` in handle_call/cast
+* making docs is super nice experience, very easy and simple with
+  MarkDown
+* a bit annoying when i have handle_call({:a, something}..) and
+  handle_call({:b, something}..) and it complains all the time
+
+
+next steps:
+
+* make distributed predictor using vowpal and `swarm`
+
+0) one group per vowpal configuration (parameters like number of bits
+   and etc)
+1) any node receive the predict requests
+2) train requests have to be copied to all nodes within a group
+
+
+
+
+---
+github.com/jackdoe @1542416390

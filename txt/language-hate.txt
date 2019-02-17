@@ -1,0 +1,47 @@
+when i introduce new service at work, some people are often upset,
+sometimes i use go, sometimes java, c or perl/ruby/js.
+
+whatever i choose some people are upset because i did not use whatever
+they like.
+
+i still do wander why would someone like certain language more than
+some other?
+
+they all suck.
+
+just choose the one for the project that will help you to get to the
+end faster, and will bite you in the ass in the more distant future.
+
+when i choose java i end up fighting with the jvm (for low latency
+high performant systems) about 30-40% of the time; not to mention i
+have to bend and twist my models so it is performant; hotspot does not
+let me code java in the way java has to be coded.
+
+go with its opinions, is still lacking in stability and dependency
+management (though making significant steps forward); also the panic
+recovery is very weird
+
+c i like the most; but well.. cost of maintaining large project is
+just too hight, chasing memory corruptions bugd is certainly not fun.
+
+perl/ruby is slow as fuck and untyped, but we have a lot of legacy
+code, so in many cases exposing some functionality as a new endpoint
+beats making a new service and rewriting the business logic.
+
+js .. i never would&#39;ve guessed how annoying not having 64 bit
+integers is. it was not once or twice i wanted to break my keyboard,
+when i had to send 0xBAAAAAAAAAAD as a string, so i can decode it; not
+to mention the volatile ecosystem; not to mention the transpilers..
+
+clojure i love to write, but hate to read, even my own code from a
+month ago(which is also the case with all my old code haha)
+
+
+...
+
+i hate them all.
+
+
+---
+github.com/jackdoe @1542122049
+

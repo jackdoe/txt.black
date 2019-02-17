@@ -1,0 +1,125 @@
+We got it all wrong
+
+The very basic highly available infra now looks like this:
+
+dns: 
+  example.com A 1         example.com A 2
+
+[ load balancer 1 ]    [ load balancer 2 ]
+  /   |  \   
+ /    |   \           ... same for DC 2 ..., or in some cases cross-dc things
+[ web server DC 1]
+  [                ]
+   [                 ]
+           |
+           |
+           |
+ [ service A ]]
+    \
+   [ service B ]]
+      \
+     [ service C ]]
+
+
+So the request is *pushed* down from load balancer, which usually uses
+some sophisticated strategy with backoff and errors prediction
+(varying from UCB to logistic regression and neural nets)
+
+At each hop someone (either the mesh layer, or the box itself) decides
+who to push the traffic to, and this is very natural as how HTTP works.
+(again using fancy strategies)
+
+
+I *believe* this is wrong and if we simply change the model from push to
+pull, many nice properties will emerge.
+
+
+Let me elaborate what is the actual problem with pushing work, lets
+say we have the following request distribution:
+
+90% of the requests take 10ms
+5%  take 200ms
+5%  take 2000ms
+and each service has queue of 10 possible slots, and only 1 thread [oversimplification]
+
+And lets imagine that those times are taking form the top load
+balancer's point of view. Also for simplicity lets pick a request
+path:
+
+load balancer -> webserver -> shoppingCartService ->; discountService ->; campaignManager
+
+The top load balancer sees something like "GET /cart" with some cookie
+and for simplicity lets imagine the cookie just contains unencrypted
+session id. What features can it use to guess if the request will take
+2 seconds or 10ms? If it sends 10 requests taking 10ms each to a
+webserver that is completely occupied by handling 2second request, it
+will of course enqueue them, and then those requests will have to wait
+2 seconds to be executed. You can say: &quot;wait wait wait, why is it
+queueing work which it can not execute? why not return 503 when busy&quot;,
+but remember that in our case most of the requests are handled within
+10ms, and some of them are async, so we can of course queue them so we
+can actually do process another request while waiting.
+
+This pattern *always* (at least in the real world) creates pileups,
+because you always end up balancing fast requests on top of a service
+that is already handling a slow request.
+
+So now the whole industry is stuck in trying to *predict* errors and
+timeouts, but as you can see the features you can use are very
+limited, e.g. the top load balancer can use the user ip, request path,
+session id, time of day, and if it is stateful it could use some
+aggregations (like amount of slow requests of this session id), the
+mesh layer can also use all kinds of infra features like per
+cpu_utilization_last_5_seconds_per_instance, but as you can guess,
+all those features are just effects, or symptoms of the slowness, 
+rarely any of them *cause* the slow request (well.. if you have 1 user
+with 1 million items in their shopping cart, the session id is a very
+good predictor for the slowness of the request).
+
+And we keep piling up algorithms and features and systems and
+platforms...to improve the balancing and reduce the pileups.
+
+If you think about it it is extremely difficult problem, in the modern
+free-for-all-stop-the-world-garbage-collection-cross-dc-sdn crazy world,
+to predict if the time of a request with any practical certainty.
+
+Some of the solutions we end up doing is we create &quot;batch&quot; clusters for
+&quot;slower&quot; requests, limit the queues with some super conservative numbers,
+retries strategies do upper confidence bound on picking the next host, etc.
+
+
+So, again, I believe we got excited and stepped into a new world while
+using only old ideas.
+
+
+Imagine if the request looks like this
+
+load balancer ->     [ queue ] { request for /cart }
+                      |  |  |
+                   [ shoppingCart ] 
+                      |  |  |    
+                     [ queue ] { getDiscounts }
+                      |  |  |
+                   [ discountService ]
+                      |  |  |
+                     [ queue ] { getRunningCampaignRules }
+                      |  |  |
+                   [ campaignManager  ]
+
+each instance of the services will take work *only* when it actually
+*can* process it.
+
+Apache Camel does that, on top of ActiveMQ with IO queues, there is
+some support for Spring+Kafka to do that as well (the ActiveMQ one
+does sub millisecond request roundtrip)
+
+A colleague of mine proposed this architecture few weeks ago, and the
+more I think about it the happier I get. I have not used it in
+production yet, but I hope I can try it out at larger scale.
+
+
+This year I will try to unlearn everything, and think about those
+problems from a different angle.
+
+---
+github.com/jackdoe @1546954827

@@ -1,0 +1,28 @@
+many cuts
+
+little by little i managed to accumulate ~200E in monthly hosting fees
+from few personal projects few euro here few there
+
+* google cloud kubernetes costs like 120E
+
+  after my startup failed i still had https://booknomads.com and
+  https://txt.black deployed there that included haproxy, mysql and
+  deployment controller managing few replicas and i didnt move them
+  because i was too busy with other stuff
+
+* had some droplets in digitalocean
+
+  few old droplets on digital ocean 5E a piece
+
+so overall now i moved all to digital ocean and cleaned up unneeded
+stuff, took me whole day though moving the domains, recreating
+deployment scripts and etc
+
+still.. shutting down the startup's kubernetes cluster was very
+emotional moment for me.
+
+lets see what the future holds
+
+
+---
+github.com/jackdoe @1542122132

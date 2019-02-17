@@ -1,0 +1,44 @@
+syntax highlighting
+
+
+i dont use syntax highlighting, it has been 5 years since i stopped
+using it, and it has been awesome.
+
+syntax highlighting:
+
+1) gazillion themes, each is pretty for subset of people;
+   form-over-function
+
+2) forces you into reading into the theme's patterns
+3) underestimates or overestimates the value of comments
+4) breaks the code flow
+
+
+no highlighting:
+
+1) makes all code equally important
+2) comments are code
+3) much faster to find what you are looking for because you are not
+   distracted by 20 different colored words
+4) it feels super cool and elitist
+5) brings fear in anyone looking at your screen
+
+now it is actually more difficult for me to read
+highlighted code
+
+
+if you are using emacs, init.el:
+
+(global-font-lock-mode -1)
+(global-hl-line-mode 1)
+
+(set-face-attribute 'default nil :family "monospace"  :height 120)
+(set-background-color "#eeeeec")
+(set-face-attribute 'region nil :background "#babdb6")
+(set-face-background 'hl-line "#dadada")
+(setq-default line-spacing 1)
+(blink-cursor-mode 0)
+
+
+---
+github.com/jackdoe @1542122074

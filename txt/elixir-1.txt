@@ -1,0 +1,32 @@
+elixir day 1
+
+
+migrated https://txt.black from golang + gin and mysql to elixir + cowboy and :dets
+
+just for fun and practice
+
+* made it personal instead of letting other people post (if you want your own user, just send me an email at info@txt.black)
+* used simple persisted ets (https://elixirschool.com/en/lessons/specifics/ets/)
+* didnt use any templating language on purpose to see how it feels to manipulate strings in the language
+
+the more i use elixir the more i like it
+still sometimes i get confused, but the docs are great and they help me a lot
+
+* distillery is particularly nice
+* ets functions are weird: [{{{:&quot;$1&quot;, :&quot;$2&quot;}, :&quot;$3&quot;}, [], [:&quot;$3&quot;]}]
+* i am still not sure if i should do the pattern matching in the helper functions or in genserver callbacks
+* took me a while to figure out that :dets.open_file/3 takes filename as atom: file: :&quot;atom name&quot;
+* still not sure when my genserver gets terminated
+* there was some confusion with mix.exs and applications: and what i can import at release time
+
+todo:
+* investitage more ets store
+* still not sure how maps are implemented under the hood
+* try dets plus raft and also Mnesia (http://erlang.org/doc/apps/mnesia/Mnesia_chap1.html)
+
+anyway, day 1 complete, check out the &quot;lets see how that looks&quot; code at https://github.com/jackdoe/txt.black
+
+
+
+---
+github.com/jackdoe @1542122599

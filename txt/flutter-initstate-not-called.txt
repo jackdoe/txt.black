@@ -1,0 +1,39 @@
+# flutter initState not called
+
+
+i started learning flutter and dart in the same time
+
+setup went ok, then i decided to make an app that uses the top 100
+guttenberg books.
+
+so far so good i made a StatefullWidget taking a book and loading it
+as a resource, everything compiles fine, but for my surprise the
+State<>'s initState() function does not get called,
+
+```
+  ...
+  String text;
+  @override
+  void initState() {
+    super.initState();
+    getFileData(widget.path).then((b) {
+      setState(() {
+        text = b;
+      });
+    });
+  }
+  ...
+```
+
+i try everything, hot-reload like gazillion times, print from build()
+works fine, but nothing made the initState get called
+
+until i did hot-restart, and at this point everything worked fine
+
+every time i try to learn something new, i jump in a pull with my
+assumptions as a bathing suit this time it was particularly annoying
+
+:D
+
+---
+github.com/jackdoe @1546970268
