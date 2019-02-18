@@ -28,7 +28,7 @@ perl/ruby is slow as fuck and untyped, but we have a lot of legacy
 code, so in many cases exposing some functionality as a new endpoint
 beats making a new service and rewriting the business logic.
 
-js .. i never would&#39;ve guessed how annoying not having 64 bit
+js .. i never would've guessed how annoying not having 64 bit
 integers is. it was not once or twice i wanted to break my keyboard,
 when i had to send 0xBAAAAAAAAAAD as a string, so i can decode it; not
 to mention the volatile ecosystem; not to mention the transpilers..
