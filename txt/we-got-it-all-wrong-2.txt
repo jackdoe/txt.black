@@ -1,0 +1,78 @@
+re: https://txt.black/~jack/we-got-it-all-wrong.txt
+
+benchmarking back-to-back vs http
+
+i made this very simplified benchmark to see the difference between
+pull and push, in cpu intense and resource constrained environment.
+(code: https://github.com/jackdoe/back-to-back/tree/master/sim)
+
+
+simplified scenario back-to-back:
+
+[ C1 ]
+  |
+[ B1 ]
+  |
+[ P1 ]
+
+
+simplified scenario HTTP:
+
+[ C1 ]
+  |
+[ P1 ]
+
+C1 - consumer
+P1 - producer (client)
+B1 - broker
+
+
+requests spin for random(100) time:
+func handle() {
+	for i := 0; i < rand.Intn(100); i++ {
+		sha256.Sum256(make([]byte, 100000))
+	}
+}
+
+initial results look very promising, the distribution of times from
+back-to-back is very stable.
+
+
+2019/02/19 21:33:37 btb ... 20000 messages, took: 34.21s, speed: 584.58 per second
+-   0+10=   35   0.18% 
+-  10+ 5=   20   0.27% 
+-  15+ 8=  846   4.50% **
+-  23+12=10708  58.05% ******************************
+-  35+18= 8202  99.06% **********************
+-  53+27=  174  99.92% 
+-  80+40=   15 100.00% 
+- 120+60=    0 100.00%
+- 180+90=    0 100.00%
+- 270+ 0=    0 100.00%
+
+2019/02/19 21:34:12 http ... 20000 messages, took: 35.20s, speed: 568.22 per second
+-   0+10=1638   8.19% *********
+-  10+ 5=1554  15.96% ********
+-  15+ 8=3123  31.57% *****************
+-  23+12=4818  55.66% **************************
+-  35+18=5407  82.70% ******************************
+-  53+27=2936  97.38% ****************
+-  80+40= 515  99.95% **
+- 120+60=   9 100.00% 
+- 180+90=   0 100.00%
+- 270+ 0=   0 100.00%
+
+
+i believe that this will be even more obvious in multi hop environment
+like modern micro services mesh, if 10% of the requests are slower,
+in 3 hop env 27% (1 - 0.9**3) of the requests will be slower.
+
+more test to be done
+
+1) multi hop (micro services example)
+2) have 2 endpoints one fast and one slow
+3) packet loss
+
+
+---
+github.com/jackdoe Tue 19 Feb 22:12:43 CET 2019
