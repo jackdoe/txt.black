@@ -63,6 +63,35 @@ back-to-back is very stable.
 - 270+ 0=   0 100.00%
 
 
+run with one fat and one slow endpoint:
+
+2019/02/19 22:26:27 btb ... 20000 messages, took: 29.95s, speed: 667.74 per second
+-   0+10=9711  48.55% ******************************
+-  10+ 5= 276  49.94% 
+-  15+ 8=  20  50.03% 
+-  23+12=  16  50.11% 
+-  35+18=3398  67.11% **********
+-  53+27=6549  99.85% ********************
+-  80+40=  30 100.00% 
+- 120+60=   0 100.00%
+- 180+90=   0 100.00%
+- 270+ 0=   0 100.00%
+
+2019/02/19 22:26:56 http ... 20000 messages, took: 29.55s, speed: 676.91 per second
+-   0+10=3274  16.37% ********************
+-  10+ 5=1523  23.98% *********
+-  15+ 8=4439  46.18% ****************************
+-  23+12=4756  69.96% ******************************
+-  35+18=3318  86.55% ********************
+-  53+27=2037  96.73% ************
+-  80+40= 581  99.64% ***
+- 120+60=  70  99.99% 
+- 180+90=   2 100.00% 
+- 270+ 0=   0 100.00%
+
+
+
+
 i believe that this will be even more obvious in multi hop environment
 like modern micro services mesh, if 10% of the requests are slower,
 in 3 hop env 27% (1 - 0.9**3) of the requests will be slower.
@@ -70,8 +99,7 @@ in 3 hop env 27% (1 - 0.9**3) of the requests will be slower.
 more test to be done
 
 1) multi hop (micro services example)
-2) have 2 endpoints one fast and one slow
-3) packet loss
+2) packet loss
    (test with many consumers and one of them has some networking
    issues)
 
