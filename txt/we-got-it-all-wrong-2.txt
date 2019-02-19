@@ -72,7 +72,8 @@ more test to be done
 1) multi hop (micro services example)
 2) have 2 endpoints one fast and one slow
 3) packet loss
-
+   (test with many consumers and one of them has some networking
+   issues)
 
 ---
 github.com/jackdoe Tue 19 Feb 22:12:43 CET 2019
