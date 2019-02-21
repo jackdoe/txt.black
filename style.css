@@ -1,0 +1,32 @@
+body,html {
+	background:#000;
+        color: #fff;
+        font-family: Menlo, monospace;
+        padding: 0;
+        margin: 0;
+        width: 80ch;
+        font-size: small;
+        
+}
+
+tr:nth-child(even) {
+	background:#000;
+}
+th,td {
+padding:0.1em 0.5em;
+}
+th {
+text-align:left;
+background:#000;
+border-bottom:0px;
+}
+#list {
+border:0px;
+width:100%;
+}
+a {
+color:#fff;
+}
+a:hover {
+color:#fff;
+}
