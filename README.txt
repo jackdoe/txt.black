@@ -1,4 +1,6 @@
-https://txt.black/~jack
+
+* https://txt.black/~jack
+
 if you want your blog here, make a pull request at
 https://github.com/jackdoe/txt.black/
 
