@@ -1,0 +1,93 @@
+How to make jar into mug.
+
+
+I have been doing some super basic leather-working for few months, and
+I have to say I enjoy it a lot. The leather I buy from
+http://www.wendelleather.com/ for about 25E per m^2, and the tools and
+needles from amazon.
+
+BTW, if you want to start leather-working just buy a chisel set
+(https://amzn.com/B014549SNG), needles and thread
+(https://amzn.com/B07BKTSP9K) and leather scraps from amazon
+(https://amzn.com/B01N9VIDJ2) and you are good to go.
+The whole thing will cost you like 50E or so.
+
+Before you start make sure you know how to stitch:
+https://youtu.be/qi3BRWO7kuo (5 minutes)
+
+
+Today I took an old jar from peppers and made a nice leather wrap
+around it to be used as a coffee mug
+
+https://drive.google.com/file/d/1U7mHdjtZeskCULlaB9niYb5OI2BVWOpF-A
+
+the jar looked like this:
+
+              |----------------|
+               ]              [
+              |                |  -|
+              |                |   |
+              |                |   |
+              |                |   | about 5cm
+              |                |   |
+              |                |   |
+              |----------------|  _|
+
+              |----------------|
+                 about 6cm
+
+
+
+I cut a piece of leather
+                                     _
+                              |---| |
+                              |AAA| |
+                              |   | |
+                              |   | |
+                              |   | |
+|-----------------------------|   | |
+| Y                      X        | |  don't remember
+| Y                      X        | |  about 15cm or so
+| Y                      X        | |  but enough so it can be
+| Y                      X     BBB| |  looped AAA to BBB
+|---------------------------------+ |_
+
+                         |--------|
+                          about 4cm
+|---------------------------------|
+    enough to loop the jar (pi*d) + 4cm
+    in my case was about 19cm
+
+https://drive.google.com/file/d/1T6pI1lnLBBkptd2qczfAJ4H8JiPPoFsVCg
+https://drive.google.com/file/d/1u-8HIeShOnCqT78lu8BFbyusOBC7XUldYA
+
+Use the chisel to punch holes on the X and Y(distance from X to Y
+should loop the jar)
+
+I made the holder loop from inside out so X is under Y, and then I
+looped the handle from AAA to BBB and punched holes and stitched it.
+
+
+End result:
+
+              |----------------| ,-.
+               ]_____________ [ /   \
+             ||           |X   ||   |
+             ||           |X   ||   |
+             ||           |X   ||   /
+             ||           |X   ||  /
+             ||           |X   || /
+             ||           |X   ||/
+             ||----------------|||
+
+https://drive.google.com/file/d/15ScPCCDI1nnk2wMP_hKWSmYaDMEY6SKI
+(have to say i made the ASCII art by hand, and turned out pretty good)
+
+
+I love making things with my hands, but I love even more using them,
+have to say the first coffee I poured in the mug made the leather hot
+and it smelled a bit leathery: best coffee ever.
+
+
+--
+github.com/jackdoe Sun 24 Feb 17:21:51 CET 2019
