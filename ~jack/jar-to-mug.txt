@@ -70,15 +70,15 @@ looped the handle from AAA to BBB and punched holes and stitched it.
 
 End result:
 
-              |----------------| ,-.
-               ]_____________ [ /   \
-             ||           |X   ||   |
-             ||           |X   ||   |
-             ||           |X   ||   /
-             ||           |X   ||  /
-             ||           |X   || /
-             ||           |X   ||/
-             ||----------------AB
+              |----------------|  ,-.
+               ]_____________ [  /   \
+             ||           |X   |||   |
+             ||           |X   |||   |
+             ||           |X   |||   /
+             ||           |X   |||  /
+             ||           |X   ||| /
+             ||           |X   |||/
+             ||-----------|X---|AB
 
 https://drive.google.com/file/d/15ScPCCDI1nnk2wMP_hKWSmYaDMEY6SKI
 (have to say I made the ASCII art by hand, and turned out pretty good)
