@@ -38,7 +38,7 @@ I want to build:
 Some of my friends have simple backup scripts such as:
 
   mysqldump | gzip > backup.sql.gz && \
-  scp backup.sql.gz remote_box:backup/$(date +%u)
+  scp backup.sql.gz remote_box:backup/backup.$(date +%u).sql.gz
 
 for get daily rotation backups (date +%u is day of the week).
 
