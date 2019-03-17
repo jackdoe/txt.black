@@ -56,7 +56,8 @@ of course usually after the first missing backup you overcompensate
 and start sending daily reports to your mail, which end up being
 ignored until the next issue pops up, you fix it and add more
 monitoring and since you usually need backups ~1 time a year you
-forget how annoying this whole thing is.
+forget how annoying this whole thing is. (not to mention when your
+monitoring gets marked as spam)
 
 with baxx.dev and one simple change:
 
