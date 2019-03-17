@@ -1,0 +1,108 @@
+██████╗  █████╗ ██╗  ██╗██╗  ██╗   ██████╗ ███████╗██╗   ██╗
+██╔══██╗██╔══██╗╚██╗██╔╝╚██╗██╔╝   ██╔══██╗██╔════╝██║   ██║
+██████╔╝███████║ ╚███╔╝  ╚███╔╝    ██║  ██║█████╗  ██║   ██║
+██╔══██╗██╔══██║ ██╔██╗  ██╔██╗    ██║  ██║██╔══╝  ╚██╗ ██╔╝
+██████╔╝██║  ██║██╔╝ ██╗██╔╝ ██╗██╗██████╔╝███████╗ ╚████╔╝
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═════╝ ╚══════╝  ╚═══╝
+
+
+I have just finished the prototype for my first product without a
+website. It is a backup service with unix philosophy in mind, and curl
+as main interface and (soon) machine learning alerting.
+
+# Example:
+  1 directional rsync
+* find all files
+* run shasum on them (in parallel)
+* send the text to baxx.dev, you get only the shasums that are not
+  uploaded
+* simply upload the missing files(in parallel):
+
+find path/.. -type f \
+  | xargs -P4 -I '{}' \
+    shasum -a 256 {} \
+  | curl -s --data-binary @- https://baxx.dev/sync/sha256/$BAXX_TOKEN \
+  | awk '{ print $2 }' \
+  | xargs -P4 -I '{}' \
+    curl -s -T {} https://baxx.dev/io/$BAXX_TOKEN/backup/{}
+
+
+# Why another backup service?
+
+I want to build:
+* completely transparent service and pricing
+* allow people to host it themselves
+* use machine learning to improve the relevancy of the alerts
+* easy to use and plug into existing backup scripts
+
+Some of my friends have simple backup scripts such as:
+
+  mysqldump | gzip > backup.sql.gz && \
+  scp backup.sql.gz remote_box:backup/$(date +%u)
+
+for get daily rotation backups (date +%u is day of the week).
+
+Some of the common things that happen after that:
+
+* remote box gets full disk
+* table is renamed
+* mysql credentials are changed
+* database is split
+* ssh keys get changed
+* local partition gets full
+* etc..
+
+of course usually after the first missing backup you overcompensate
+and start sending daily reports to your mail, which end up being
+ignored until the next issue pops up, you fix it and add more
+monitoring and since you usually need backups ~1 time a year you
+forget how annoying this whole thing is.
+
+with baxx.dev and one simple change:
+
+  mysqldump | gzip | encrypt -k .pass | \
+  curl --data-binary @- https://baxx.dev/$BAXX_TOKEN/backup.sql.gz
+
+* get notified if the file is too small
+* get notified if the file is too old
+
+
+# Transparency
+
+* source
+  https://github.com/jackdoe/baxx/
+
+* infrastructure and pricing
+  https://github.com/jackdoe/baxx/blob/master/infra.txt
+
+* todo
+  https://github.com/jackdoe/baxx/blob/master/TODO.txt
+
+
+# No website
+
+The way you register is through ssh, just `ssh register@ui.baxx.dev`,
+the help is optimized for tty such as `curl https://baxx.dev/help`,
+payments are with paypal subscription and IPN, and you get
+instructions via email. Now the flow works very well and I love how
+simple it is to register and pay, get help and use the service.
+
+I used https://github.com/marcusolsson/tui-go to build the
+registration UI and it was pure joy!
+
+The font I got from:
+http://patorjk.com/software/taag/#p=display&f=ANSI%20Shadow&t=amazing
+and it gave me such a retro feeling, I felt like a kid again.
+
+# Charge during ALPHA
+
+I decided to charge 5$ (0.1$ trial) during the alpha, even my friends,
+This way they will also tell me if the service is worth its money.
+
+# Next Steps
+
+* get feedback
+* improve the api
+* improve the help
+* work on vowpal wabbit integration
+* repeat
