@@ -20,6 +20,11 @@ https://github.com/jackdoe/scrambled-eggs
   rejection of the modern world
   (also https://scrambled-eggs.xyz)
 
+
+https://ui.baxx.dev
+https://github.com/jackdoe/baxx
+   backup service for developers
+
 https://github.com/jackdoe/back-to-back
   investigating queues as transport instead of push load balancers
   (traditional http soa)
