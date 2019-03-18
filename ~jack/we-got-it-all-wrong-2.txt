@@ -1,6 +1,7 @@
 re: https://txt.black/~jack/we-got-it-all-wrong.txt
 
 benchmarking back-to-back vs http
+(https://github.com/jackdoe/back-to-back - sync i/o queue)
 
 i made this very simplified benchmark to see the difference between
 pull and push, in cpu intense and resource constrained environment.
@@ -63,7 +64,7 @@ back-to-back is very stable.
 - 270+ 0=   0 100.00%
 
 
-run with one fat and one slow endpoint:
+run with one fast and one slow endpoint:
 
 2019/02/19 22:26:27 btb ... 20000 messages, took: 29.95s, speed: 667.74 per second
 -   0+10=9711  48.55% ******************************
