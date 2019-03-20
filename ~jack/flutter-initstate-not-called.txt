@@ -30,8 +30,8 @@ works fine, but nothing made the initState get called
 
 until i did hot-restart, and at this point everything worked fine
 
-every time i try to learn something new, i jump in a pull with my
-assumptions as a bathing suit this time it was particularly annoying
+every time i try to learn something new, i jump in the pool with my
+assumptions as a bathing suit, this time it was particularly annoying
 
 :D
 
