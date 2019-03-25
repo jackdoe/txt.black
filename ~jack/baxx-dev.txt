@@ -25,8 +25,8 @@ or go to https://ui.baxx.dev (it is the same program run from shellinabox)
 │ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝           │
 │                                            │
 │ Storage 10G                                │
-│   Trial 1 Month 0.1E                       │
-│   Subscription: 5E per Month               │
+│   Trial 1 Month 0.1EUR                     │
+│   Subscription: 5EUR per Month             │
 │   Availability: ALPHA                      │
 │                                            │
 │                                            │
@@ -138,8 +138,9 @@ and it gave me such a retro feeling, I felt like a kid again.
 
 # Charge during ALPHA
 
-I decided to charge 5E (0.1E trial) during the alpha, even my friends,
-This way they will also tell me if the service is worth its money.
+I decided to charge 5EUR (0.1EUR trial) during the alpha, even my 
+friends. This way they will also tell me if the service is worth its 
+money.
 
 # Next Steps
 
