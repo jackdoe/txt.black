@@ -138,7 +138,7 @@ and it gave me such a retro feeling, I felt like a kid again.
 
 # Charge during ALPHA
 
-I decided to charge 5$ (0.1$ trial) during the alpha, even my friends,
+I decided to charge 5E (0.1E trial) during the alpha, even my friends,
 This way they will also tell me if the service is worth its money.
 
 # Next Steps
