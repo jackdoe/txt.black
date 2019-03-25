@@ -10,6 +10,47 @@ I have just finished the prototype for my first product without a
 website. It is a backup service with unix philosophy in mind, and curl
 as main interface and (soon) machine learning alerting.
 
+# Register
+ssh register@ui.baxx.dev
+or go to https://ui.baxx.dev (it is the same program run from shellinabox)
+
+
+┌────────────────────────────────────────────┐
+│                                            │
+│ ██████╗  █████╗ ██╗  ██╗██╗  ██╗           │
+│ ██╔══██╗██╔══██╗╚██╗██╔╝╚██╗██╔╝           │
+│ ██████╔╝███████║ ╚███╔╝  ╚███╔╝            │
+│ ██╔══██╗██╔══██║ ██╔██╗  ██╔██╗            │
+│ ██████╔╝██║  ██║██╔╝ ██╗██╔╝ ██╗           │
+│ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝           │
+│                                            │
+│ Storage 10G                                │
+│   Trial 1 Month 0.1E                       │
+│   Subscription: 5E per Month               │
+│   Availability: ALPHA                      │
+│                                            │
+│                                            │
+│ E-mail                                     │
+│ █                                          │
+│                                            │
+│ Password                                   │
+│                                            │
+│                                            │
+│ Confirm Password                           │
+│                                            │
+│                                            │
+│ Registering means you agree with           │
+│ the terms of service!                      │
+│                                            │
+│             [Register]  [Login]            │
+│                                            │
+│ [Help]  [What/Why/How]  [Terms Of Service] │
+│                                            │
+│                   [Quit]                   │
+└────────────────────────────────────────────┘
+
+after that you will receive email with instructions
+
 # Example:
   1 directional rsync
 * find all files
