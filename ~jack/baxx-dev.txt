@@ -74,7 +74,7 @@ with baxx.dev and one simple change:
   https://github.com/jackdoe/baxx/
 
 * infrastructure and pricing
-  https://github.com/jackdoe/baxx/blob/master/infra.txt
+  https://github.com/jackdoe/baxx/blob/master/infra-and-pricing.txt
 
 * todo
   https://github.com/jackdoe/baxx/blob/master/TODO.txt
