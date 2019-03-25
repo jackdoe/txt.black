@@ -51,8 +51,8 @@ or go to https://ui.baxx.dev (it is the same program run from shellinabox)
 
 after that you will receive email with instructions
 
-# Example:
-  1 directional rsync
+# Let me illustrate what I mean by unix friendly:
+Example 1 directional rsync
 * find all files
 * run shasum on them (in parallel)
 * send the text to baxx.dev, you get only the shasums that are not
