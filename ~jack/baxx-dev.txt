@@ -65,7 +65,7 @@ find path/.. -type f \
   | curl -s --data-binary @- https://baxx.dev/sync/sha256/$BAXX_TOKEN \
   | awk '{ print $2 }' \
   | xargs -P4 -I '{}' \
-    curl -s -T {} https://baxx.dev/io/$BAXX_TOKEN/backup/{}
+    curl -s -T {} "https://baxx.dev/io/$BAXX_TOKEN/backup/{}?age=87400&delta=80"
 
 
 # Why another backup service?
@@ -103,7 +103,7 @@ monitoring gets marked as spam)
 with baxx.dev and one simple change:
 
   mysqldump | gzip | encrypt -k .pass | \
-  curl --data-binary @- https://baxx.dev/$BAXX_TOKEN/backup.sql.gz
+  curl --data-binary @- "https://baxx.dev/$BAXX_TOKEN/backup.sql.gz?age=87400&delta=80"
 
 * get notified if the file is too small
 * get notified if the file is too old
