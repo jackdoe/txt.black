@@ -64,7 +64,7 @@ you will probably need:
 
 Don't go to the cloud.
 It is truly a piece of shit and will force you to design systems in a
-worse way because the IO is with pre 1990 throughput..
+horrible way, because the IO is with pre 1990 throughput..
 
 -b
 
