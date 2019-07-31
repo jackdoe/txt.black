@@ -1,0 +1,71 @@
+The Cloud
+---
+
+The cloud (aws, gcloud, azure... whatever) is a piece of shit.
+10x price for 1/10th performance (so 100x price haha)
+
+Not only the hardware there is pathetic and all IPC is horrible, but
+also all the managed services you use from them are performing horribly.
+(from es to rabbitmq to even attached block storage [which is
+probably why they are performing this way])
+
+What I do for https://baxx.dev/stat (and for other projects):
+* buy 2-3 machines from hetzner [or somewhere else]
+  for 200E per month you get 24 core (48 ht) 128g ram box with 2tb ssd
+  (usually in mirror, so 1tb), that can easily do ~100k randread and
+  50k randwrite iops
+  1gbps unlimited network
+
+  just for reference, this will cost ~5k on the cloud, and will
+  perform (even though with similar specs) 1/10th of bare metal box
+
+* learn some basic sysadmin skills, now it is easier than ever
+* systemd + docker can go a long way
+* try not to use many dependencies, don't decouple without good reason
+* avoid queues if you can
+  this seems counter intuitive, by queues I don't mean just kafka, I
+  mean all kinds of receive (usually unbounded) queues, for example
+  nginx's listen(2) backlog queue has limit N (unlimited in some
+  cases), then you have accept(2) queue on wherever nginx is proxying
+  to, and then from this thing to your database, and the database's
+  queue depth and etc.
+
+  interacting queues have extremely annoying emergent chaotic
+  properties, so every time you can avoid it, do it
+
+you will probably need:
+* postgres/mysql
+  setup master->slave so you can have 'hot' standby.
+  on this machines 1 postgres master can handle your traffic (unless
+  you just do bad design) until you reach mid size[100-200 employees]
+
+* zookeeper
+  pretty much you start it and let it run, unless you abuse it
+
+* es, kafka, nginx, redis, some backend (node,go whatever) etc
+  use cgroups or docker to make sure one dependency wont bring the
+  whole box into thrashing, keep in mind modern thrashing is pretty
+  much unstoppable.
+
+* some external dns, setup your zone records with 5 min ttl so
+  when one of the machines dies you just manually switch until you
+  have new one setup (which could take 1 day)
+  the machines don't die every day.. so dns round robbin is enough
+  and should bring you to .99+ availability
+
+* keep in mind you have 1 machine worth of capacity, the other one
+  is pretty much for live/live backup, which means at all time you
+  must be able to handle all the traffic with 1 machine
+
+* make the machines ping each other
+  https://github.com/jackdoe/baxx/blob/master/README.txt#L76
+  (example of how I do it for baxx so I get 
+
+
+Don't go to the cloud.
+It is truly a piece of shit and will force you to design systems in a
+worse way because the IO is with pre 1990 throughput..
+
+-b
+
+
