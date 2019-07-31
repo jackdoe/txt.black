@@ -13,8 +13,7 @@ What I do for https://baxx.dev/stat (and for other projects):
 * buy 2-3 machines from hetzner [or somewhere else]
   for 200E per month you get 24 core (48 ht) 128g ram box with 2tb ssd
   (usually in mirror, so 1tb), that can easily do ~100k randread and
-  50k randwrite iops
-  1gbps unlimited network
+  50k randwrite iops, 1gbps unlimited network
 
   just for reference, this will cost ~5k on the cloud, and will
   perform (even though with similar specs) 1/10th of bare metal box
@@ -59,7 +58,8 @@ you will probably need:
 
 * make the machines ping each other
   https://github.com/jackdoe/baxx/blob/master/README.txt#L76
-  (example of how I do it for baxx so I get 
+  (example of how I do it for baxx so I get notified when any process
+  or cronjob on any box is not running as expected)
 
 
 Don't go to the cloud.
