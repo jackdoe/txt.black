@@ -131,7 +131,7 @@ Once you are on your own:
   if you can do it with sinatra, don't introduce caching layers unless
   absolutely needed, don't use haproxy if you can go by with dns round
   robbin, don't run cassandra if you just need LSMT can simply embed
-  rocksdb. dont run kubernetes if you can do it with systemd.
+  rocksdb, dont run kubernetes if you can do it with systemd..
 
 Don't go to the cloud.
 It will force you to use super crappy and slow or limited things such
