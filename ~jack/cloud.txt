@@ -31,6 +31,11 @@ What I do for https://baxx.dev/stat (and for other projects):
 
   interacting queues have extremely annoying emergent chaotic
   properties, so every time you can avoid it, do it
+  (I did some investigation in the we-got-it-all-wrong post
+   https://txt.black/~jack/we-got-it-all-wrong.txt
+   https://txt.black/~jack/we-got-it-all-wrong-2.txt
+   where I changed from push to pull to understand the dynamics
+   better)
 
 you will probably need:
 * postgres/mysql
@@ -61,11 +66,77 @@ you will probably need:
   (example of how I do it for baxx so I get notified when any process
   or cronjob on any box is not running as expected)
 
+* secure your boxes, following How-To-Secure-A-Linux-Server will
+  give you a *very* good head start:
+  https://github.com/imthenachoman/How-To-Secure-A-Linux-Server
+
+Once you are on your own:
+* keep running live/live setup
+  This is very critical, backups do not work in chaotic systems, there
+  are gazillion reasons why a backup will fail, the only way you can
+  be sure you can recover if a machine dies, is to know for a fact
+  that the other machine is serving traffic.
+
+  Here I want to distinguish between backups of data (saving old copy
+  of a database increase someone truncates the wrong table by
+  accident, which sadly happens way more than we want to admit), and
+  having a way to recover from a situation where a machine is dead.
+
+  As stated, the only way to ensure quick recovery is if you actually
+  know that the fallback machine was working with the same live
+  traffic as the dead machine.
+
+* avoid buying managed services
+  Not being able to strace/gdb/iostat or use jmx to hook into the
+  service that is causing you issues has caused me so much pain. I
+  regret it every time I helplessly look at a slow operation that
+  intuitively I know should be fast and cant explain why is it
+  performing like shit. You cant even login to it to see if the disk
+  is faulty.
+
+  All those graphs and logs that the managed services usually give you
+  are useless in crisis or hardware degradation scenario, as it is
+  often impossible to isolate the symptom from the cause when the
+  thrashing starts.
+
+* don't use CDNs
+  This is harder than it sounds of course, especially if you managed
+  to get to 2 MB javascript bundle and 50megapixel images..
+
+  CDNs increase your complexity, they creep into your deployments and
+  the way you think..invalidation of objects, naming conventions etc
+  etc.. inline as much as you can and be free.
+
+* do it once
+  Because you will end up running like 20 things, it is important to
+  not worry about them. This whole enterprise boils down to you
+  running things that are just good software, e.g. redis, you run it
+  once and thats it. (LTS is way more marketing than it seems, so
+  don't trust it blindly)
+
+* avoid big data while you can
+  Most companies can go very far by appending their analytics events
+  in a log file or a table.
+  having 30-40 million events in a text file is in the order of 10-20GB
+  on good ssd with a good cpu you can slice and dice it with incredible
+  speed.
+
+  cat | rg | jq | sort | uniq -c | sort > report.$(date).txt is amazing
+  just imagine the alternative:
+  oozie, hadoop, spark, job reports, transformers, dependencies
+  brrrrrr amazing how we ended up here so we can count some numbers
+
+* remove layers
+  e.g. don't run elasticsearch if you only need lucene, don't run rails
+  if you can do it with sinatra, don't introduce caching layers unless
+  absolutely needed, don't use haproxy if you can go by with dns round
+  robbin, don't run cassandra if you just need LSMT can simply embed
+  rocksdb. dont run kubernetes if you can do it with systemd.
 
 Don't go to the cloud.
-It is truly a piece of shit and will force you to design systems in a
-horrible way, because the IO is with pre 1990 throughput..
+It will force you to use super crappy and slow or limited things such
+as s3 and over-complicate your infrastructure to incredible degree.
+It is truly a piece of shit and will just force you to design systems
+in a horrible way.
 
 -b
-
-
