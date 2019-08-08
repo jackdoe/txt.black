@@ -107,6 +107,13 @@ Once you are on your own:
   the way you think..invalidation of objects, naming conventions etc
   etc.. inline as much as you can and be free.
 
+  EDIT(08/08/2019):
+  Many people commented they dont agree with this point, the theme of
+  the whole post is about reducing complexity and cost *if you can*.
+  I realize sometimes this is not possible, but when you have to use
+  CDNs then you must use them, reality is in many cases you dont have
+  to.
+
 * do it once
   Because you will end up running like 20 things, it is important to
   not worry about them. This whole enterprise boils down to you
@@ -139,4 +146,4 @@ as s3 and over-complicate your infrastructure to incredible degree.
 It is truly a piece of shit and will just force you to design systems
 in a horrible way.
 
--b
+-b 07/08/2019
