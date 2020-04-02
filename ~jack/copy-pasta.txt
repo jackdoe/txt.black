@@ -8,7 +8,7 @@ make some key `echo $RANDOM > ~/.key && chmod 0600 ~/.key`, then
 create rput and rget functions in zsh
 
 rput() {
-    encrypt -k ~/.key | ssh berserk.red -- bash -c 'cat > private/.clip' 2>&1 > /dev/null
+    encrypt -k ~/.key | ssh berserk.red -- bash -c 'cat > private/.clip' 2>/dev/null
 }
 
 rget() {
