@@ -12,7 +12,7 @@ rput() {
 }
 
 rget() {
-    ( ssh berserk.red -- cat private/.clip ) | encrypt -d -k ~/.key
+    ( ssh berserk.red -- cat private/.clip 2>/dev/null ) | encrypt -d -k ~/.key
 }
 
 
