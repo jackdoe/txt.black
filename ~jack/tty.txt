@@ -1,4 +1,4 @@
-Working from the TTY for a week.
+Coding from the TTY for a week.
 
 # TLDR
 
