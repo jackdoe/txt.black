@@ -1,0 +1,607 @@
+Working from the TTY for a week.
+
+# TLDR
+
+I used only the tty for 7 nights. It was relaxing, and now I go back
+to it every time I am overwhelmed. Browsing was OK, I was able to
+navigate go/kernel documentation and be productive.
+
+# Why
+
+Now (covid19) it is incredibly hard for me to disconnect from work, we
+have about 15 engineers and it just happens that at least one of them
+is working late, so there is activity in slack all the time until 1-2
+am.
+
+So I decided to make the equivalent of going on a holiday for a week:
+I decided to use only the tty for 7 nights, on a computer on which I
+dont have work code, email and slack installed.
+
+# Laptop
+
+I bought used t440p laptop, they go from 100 to 300E. Super sturdy
+machine, like the oposite of my xps. Very easy to open, and very
+hackable.
+
+# Setup
+
+Install debian and do some basic fixes to make the tty usable.
+
++ rate (whoa slow keyboard rate pisses me off)
+
+add 'kbdrate -r 30 -d 0' to /etc/rc.local
+
++ ctrl+/ etc
+
+super annoying that ctrl+/ sends Delete and I want to bind it to
+`undo`, to do that you have to:
+
+$ showkeys
+
+press ctrl + /
+
+check out the keycode, (in my case it is 53)
+
+$ dumpkeys > keymap
+
+change
+	control	keycode  53 = Delete
+	shift	control	keycode  53 = Delete
+
+to
+	control	keycode  53 = Control_underscore
+	shift	control	keycode  53 = Meta_underscore
+
+and 51 and 52 to
+	shift	control	keycode  51 = Control_asciicircum
+	shift	control	keycode  52 = Meta_asciicircum
+	(I use S-C-. and S-C-, for cursor)
+
+add 'loadkeys path/to/keymap' in /etc/rc.local
+
+then the bindings:
+
+(define-key global-map (kbd "C-_") 'undo)
+(define-key global-map (kbd "M-_") 'undo)
+(define-key global-map (kbd "M-^") 'mc/mark-next-like-this)
+(define-key global-map (kbd "C-^") 'mc/mark-previous-like-this)
+
+
++ mouse
+
+install consolation or gpm
+
++ cursor
+
+instead of block cursor this will show the tty setup cursor (blinking
+underscore)
+
+(setq visible-cursor nil)
+
+otherwise emacs has blinking (HZ/5 ~200ms) block cursor which is
+horrible, so replace it with blinking underscore to take less
+attention from your eyes. I tried all kinds of ways to stop the
+blinking but none worked.
+
++ brightness
+
+max=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+echo -n $max | sudo tee /sys/class/backlight/intel_backlight/brightness
+
++ font
+
+install terminus and then add the setfont command to your bash/zshrc
+
+setfont Uni3-Terminus20x10 # 12x6 14 16 22x11 24x12 28x14 32x16
+
++ emacs
+
+(package-initialize)
+(require 'go-mode)
+(require 'multiple-cursors)
+(require 'tramp)
+(load-library "view")
+(require 'cc-mode)
+(require 'ido)
+(require 'compile)
+
+(setq tramp-default-method "ssh")
+(setq undo-limit 20000000)
+(setq undo-strong-limit 40000000)
+
+(defun delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
+(define-key global-map (kbd "C-h") 'delete-backward-char)
+(define-key global-map (kbd "M-C-h") 'backward-kill-word)
+(define-key global-map (kbd "C-_") 'undo)
+(define-key global-map (kbd "M-_") 'redo)
+
+(define-key global-map (kbd "<M-backspace>") 'delete-word)
+(define-key global-map (kbd "C-M-h") 'delete-word)
+
+
+(define-key global-map (kbd "<f2>") 'compile)
+(define-key global-map (kbd "<f1>") 'next-error)
+(define-key global-map [C-tab] 'indent-region)
+(define-key global-map (kbd "M-^") 'mc/mark-next-like-this)
+(define-key global-map (kbd "C-^") 'mc/mark-previous-like-this)
+
+(global-unset-key (kbd "C-t"))
+
+
+(ido-mode 1)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+(setq inhibit-startup-message t)
+
+(global-linum-mode 0)
+(display-time-mode 1)
+(global-font-lock-mode -1)
+(gpm-mouse-mode -1)
+(setq backward-delete-char-untabify nil)
+
+(display-battery-mode 1)
+(setq make-backup-files nil)
+(setq auto-save-deault nil)
+
+(show-paren-mode 1)
+(setq show-paren-delay 0.0)
+(setq show-paren-style 'parenthesis)
+(transient-mark-mode t)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(defun custom-go-mode-hook ()
+  (setq gofmt-command "goimports")
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go generate && go build -v && go test -v && go vet &&  golangci-lint run"))
+  (if (not (string-match "go" compile-command))
+      (set (make-local-variable 'compile-command)
+           "go build -v && go test -v && go vet"))
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-,") 'pop-tag-mark)
+)
+
+(add-hook 'go-mode-hook 'custom-go-mode-hook)
+
+
+
+.bashrc:
+
+  export VISUAL='emacsclient -ct'
+  export EDITOR='emacsclient -ct'
+  alias e='emacsclient -ct'
+  alias emacs=e
+  alias vi=e
+
+
+also start emacs daemon:
+
+  ~/.config/systemd/user/emacs.service
+
+  [Unit]
+  Description=Emacs text editor
+  Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+  [Service]
+  Type=forking
+  ExecStart=/usr/bin/emacs --daemon
+  ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+  Environment=SSH_AUTH_SOCK=%t/keyring/ssh
+  Restart=on-failure
+
+
+  [Install]
+  WantedBy=default.target
+
++ fzf
+  setup zsh with shared history and fzf
+
++ lock
+
+vlock -all on pm suspend
+
++ email (personal)
+
+I use `forgotten` (github.com/jackdoe/forgotten) to manage encrypted
+list of passwords, so just use it with mutt:
+
+.muttrc:
+  source "/usr/bin/forgotten -key gmail -mutt |"
+  set from = "xyz@example.com"
+  set realname = "aa bb"
+  set use_from = yes
+  set envelope_from = yes
+  set smtp_url = "smtp://xyz@example.com@smtp.gmail.com:587"
+  set smtp_pass =$my_pass
+  set imap_user = "xyz@example.com"
+  set imap_pass =$my_pass
+  set folder = "imaps://imap.gmail.com:993"
+  set spoolfile = "+INBOX"
+  set ssl_force_tls = yes
+  bind index G imap-fetch-mail
+  set editor = "emacsclient -ct"
+  set charset = "utf-8"
+  set record = ''
+  set header_cache = "~/.mutt/cache/headers"
+  set message_cachedir = "~/.mutt/cache/bodies"
+
+
+# Day 1:
+
+After installing and doing the basic setup it was pretty late, so I
+didnt do much more.
+
++ links2 works nice, but too graphical, its ok to see images though
+
++ non ips display is total shit for console; bought new one from
+  amazon, we will see this saturday
+
++ replace gpm with consolation
+
+# Day 2
+
++ patched consolation to support right touchpad click because my
+  middle button is not very good
++ fixed the ips display; it is a total gamechanger
+  the black is so much more black than before; amazing for tty
++ fix alsa default card
+  cat > /etc/asound.conf <<EOF
+  defaults.pcm.card 1
+  defaults.ctl.card 1
+  EOF
++ download some royalty free music and played it with mplayer
++ battery lasts quite a lot
+
+I wish eww worked better, I hate going out of emacs
+I am so happy with the new display.
+
++ setup tlp; cap max freq at 1000mhz, I should've gotten i5 instead of
+  i7, this i7 is just hot for no reason. Will disable hyper threading,
+  maybe it will feel better.
+
+  or maybe I should open the laptop and clean it.
+
+  even with 1 core and no hyperthreading and cap on 1ghz it still
+  gets hot, I guess its cleaning time; will actually check on amazon
+  for i5, shouldnt be very expensive
+
+  though despite the temperature, battery lasts for 6 hours (possibly more)
+
++ went back to gpm; having mouse in links2 -g seems better
+
+# Day 3
+
+The new screen arrived, took exactly 5 minutes to replace, I love
+working on machines that are easy to repair.
+
++ wow that is a good screen haha, I forgot how much nicer it is
++ i5 cpus are super expensive; no way I am buying one
++ removed thermald and started using thinkfan with lower threshold
+  (had to add options thinkpad_acpi experimental=1 fan_control=1 in
+  modprobe.d/thinkfan.conf)
+  so using fan level 1 at 40C is much better because when it gets to
+  50C it is just hot on my palm
++ still thinking of what to write
++ it is incredibly calming having no windows
++ I did open and clean up the turbine a bit, but wasnt much to clean
+  it is however really nice to have a laptop that is meant to be open
+
+# Day 4
+
++ made copy paste http service on top of unix socket
+  so I can copy between emacs and zsh without using ansi-term
+  (https://github.com/jackdoe/pasta)
+
++ patching the linux kernel vt.c and selection.c to support GETSEL
+  so that I can just select with the mouse and then do M-w, now that
+  C-y is working this seems like it will fit really nice
+
+  actually the SETSEL GETSEL thing works pretty good.
+
+  oh to build a custom kernel on debian (something I have never done,
+  I always used to run trunk on my slackware, and -CURRENT on fbsd
+  but never actually did it on debian, turns out it is quite nice:
+
+  cd /usr/src && \
+    git clone --depth=1 \
+      git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+
+  then copy your config from linux-config-5.xx into the trunk and then:
+
+  make -j8 bindep-pkg LOCALVERSION=-xyz
+
+  working without X for the whole day, was pretty fun.
+
+--- patch for GETSEL
+
+commit 5cf882d8b74747bbc08463d83cf80509c920edca
+Author: borislav nikolov <jack@sofialondonmoskva.com>
+Date:   Sat Mar 21 23:42:22 2020 +0100
+
+    add copy_selection_to_user
+
+diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+index d54a549c5892..9b26dec762dd 100644
+--- a/drivers/tty/vt/selection.c
++++ b/drivers/tty/vt/selection.c
+@@ -6,6 +6,7 @@
+  *			       struct tty_struct *)'
+  *     'int set_selection_kernel(struct tiocl_selection *, struct tty_struct *)'
+  *     'void clear_selection(void)'
++ *     'int copy_selection_to_user(char __user *)'
+  *     'int paste_selection(struct tty_struct *)'
+  *     'int sel_loadlut(char __user *)'
+  *
+@@ -71,6 +72,45 @@ sel_pos(int n, bool unicode)
+ 	return inverse_translate(vc_sel.cons, screen_glyph(vc_sel.cons, n), 0);
+ }
+ 
++/**
++ *	copy_selection_to_user		-	get current selection
++ *
++ *	Get a copy of current selection, console lock does not have to
++ *	be held
++ */
++int copy_selection_to_user(char __user *arg)
++{
++	int get_sel_user_size;
++	int ret;
++
++	if (copy_from_user(&get_sel_user_size,
++			   arg,
++			   sizeof(vc_sel.buf_len)))
++		return -EFAULT;
++
++	mutex_lock(&vc_sel.lock);
++
++	if (get_sel_user_size < vc_sel.buf_len) {
++
++		mutex_unlock(&vc_sel.lock);
++
++		return -EFAULT;
++	}
++
++	ret = copy_to_user(arg,
++			   &vc_sel.buf_len,
++			   sizeof(vc_sel.buf_len));
++	if (ret == 0)
++		ret = copy_to_user(arg+sizeof(vc_sel.buf_len),
++				   vc_sel.buffer,
++				   vc_sel.buf_len);
++
++	mutex_unlock(&vc_sel.lock);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(copy_selection_to_user);
++
+ /**
+  *	clear_selection		-	remove current selection
+  *
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 309a39197be0..2b7eb55aafa3 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -3061,6 +3061,9 @@ int tioclinux(struct tty_struct *tty, unsigned long arg)
+ 		case TIOCL_PASTESEL:
+ 			ret = paste_selection(tty);
+ 			break;
++		case TIOCL_GETSEL:
++			ret = copy_selection_to_user(p+1);
++			break;
+ 		case TIOCL_UNBLANKSCREEN:
+ 			console_lock();
+ 			unblank_screen();
+diff --git a/include/linux/selection.h b/include/linux/selection.h
+index 5b890ef5b59f..7cb971795013 100644
+--- a/include/linux/selection.h
++++ b/include/linux/selection.h
+@@ -15,6 +15,7 @@ struct tty_struct;
+ struct vc_data;
+ 
+ extern void clear_selection(void);
++extern int copy_selection_to_user(char __user *arg);
+ extern int set_selection_user(const struct tiocl_selection __user *sel,
+ 			      struct tty_struct *tty);
+ extern int set_selection_kernel(struct tiocl_selection *v,
+diff --git a/include/uapi/linux/tiocl.h b/include/uapi/linux/tiocl.h
+index b32acc229024..055ebda041d4 100644
+--- a/include/uapi/linux/tiocl.h
++++ b/include/uapi/linux/tiocl.h
+@@ -20,6 +20,7 @@ struct tiocl_selection {
+ };
+ 
+ #define TIOCL_PASTESEL	3	/* paste previous selection */
++#define TIOCL_GETSEL	18	/* get current selection */
+ #define TIOCL_UNBLANKSCREEN	4	/* unblank screen */
+ 
+ #define TIOCL_SELLOADLUT	5
+
+---
+
+    to use the patch you need something like:
+
+---
+#include <stdio.h>
+#include <sys/ioctl.h>
+#include <linux/tiocl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <strings.h>
+
+
+struct getsel {
+  char code;
+  int size;
+  char data[0];
+} __attribute((__packed__));
+
+struct getsel * get_selection(int size) {
+  struct getsel *d = (struct getsel *) malloc(size + sizeof(struct getsel));
+  if (d == NULL) {
+    perror("malloc");
+    exit(1);
+  }
+
+  bzero(d, size + sizeof(struct getsel));
+
+  d->code = 18; // TIOCL_GETSEL
+  d->size = size;
+
+  int fd = open("/dev/tty",O_RDWR);
+  if (ioctl(fd, TIOCLINUX, d) < 0) {
+    perror("paste: TIOCLINUX");
+    exit(1);
+  }
+  close(fd);
+  return d;
+}
+
+int main(void) {
+  int size = 200;
+  struct getsel *d = get_selection(size);
+
+  printf("size: %d\n",d->size);
+  for (int i = 0; i < size; i++) {
+    if (d->data[i]) {
+      printf("data[%d] = %d\n",i, d->data[i]);
+    }
+  }
+  d->data[d->size-1] = '\0';
+  printf("string: %s\n", d->data);
+  free(d);
+}
+
+---
+
+anyway, there are still issues to be solved, for example when I
+press ctrl+y while `cat` is open I cant past inside.
+
++ moved man to be within emacs
+in .zshrc:
+  man() {
+    emacsclient -ct -e '(man "'$1'")'
+  }
+
+still need to get man9
+
+# Day 5
+
+fucking cursor blinking is annoying the hell out of me
+I tried all kinds of tricks to disable it from tty and emacs
+it is always fucking blinking.
+
+so
+
+(setq visible-cursor nil)
+
+and patch it in the kernel
+
+--- patch for always block cursor
+
+commit afda0f8175fe560d86e1f2ec0b33a9f25b3bf13f
+Author: borislav nikolov <jack@sofialondonmoskva.com>
+Date:   Wed Apr 1 09:13:55 2020 +0200
+
+    fuck blinking underline
+
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index 2b7eb55aafa3..b8a7478c9f98 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -2306,13 +2306,6 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
+ 				set_mode(vc, 0);
+ 			return;
+ 		case 'c':
+-			if (vc->vc_priv == EPdec) {
+-				if (vc->vc_par[0])
+-					vc->vc_cursor_type = vc->vc_par[0] | (vc->vc_par[1] << 8) | (vc->vc_par[2] << 16);
+-				else
+-					vc->vc_cursor_type = cur_default;
+-				return;
+-			}
+ 			break;
+ 		case 'm':
+ 			if (vc->vc_priv == EPdec) {
+diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
+index bb6ae995c2e5..721f326b01e6 100644
+--- a/drivers/video/fbdev/core/fbcon.c
++++ b/drivers/video/fbdev/core/fbcon.c
+@@ -173,7 +173,7 @@ static const struct consw fb_con;
+ 
+ static int fbcon_set_origin(struct vc_data *);
+ 
+-static int fbcon_cursor_noblink;
++static int fbcon_cursor_noblink = 1;
+ 
+ #define divides(a, b)	((!(a) || (b)%(a)) ? 0 : 1)
+ 
+@@ -3527,13 +3527,8 @@ static ssize_t store_cursor_blink(struct device *device,
+ 
+ 	blink = simple_strtoul(buf, last, 0);
+ 
+-	if (blink) {
+-		fbcon_cursor_noblink = 0;
+-		fbcon_add_cursor_timer(info);
+-	} else {
+-		fbcon_cursor_noblink = 1;
+-		fbcon_del_cursor_timer(info);
+-	}
++	fbcon_cursor_noblink = 1;
++	fbcon_del_cursor_timer(info);
+ 
+ err:
+ 	console_unlock();
+diff --git a/include/linux/console_struct.h b/include/linux/console_struct.h
+index 24d4c16e3ae0..b21061f8aad7 100644
+--- a/include/linux/console_struct.h
++++ b/include/linux/console_struct.h
+@@ -166,7 +166,7 @@ extern void vc_SAK(struct work_struct *work);
+ #define CUR_HWMASK	0x0f
+ #define CUR_SWMASK	0xfff0
+ 
+-#define CUR_DEFAULT CUR_UNDERLINE
++#define CUR_DEFAULT CUR_BLOCK
+ 
+ bool con_is_visible(const struct vc_data *vc);
+ 
+
+---
+
+applying it..
+
+
+Whoaaa, this is so beautiful.. just a block █, absolutely amazing
+(also I just found out about M-x insert-char).
+
+I did not expect the blinking to put so much mental pressure, having █
+just sitting not doing anything, just telling you where you are, its
+like meditation for the eyes.
+
+
+Conclusion:
+
+I have to seriously re-think the way I spend time on my other computer.
+Working only on a tty is completely calming experience, there are no
+ads, no pressure, only code and text.
+
+
+PS:
+
+Those kernel patches are just for fun, dont take them seriously.
+
+---
+github.com/jackdoe Thu 02 Apr 2020 09:49:32 AM CEST
+
