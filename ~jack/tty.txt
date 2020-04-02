@@ -6,6 +6,15 @@ I used only the tty for 7 nights. It was relaxing, and now I go back
 to it every time I am overwhelmed. Browsing was OK, I was able to
 navigate go/kernel documentation and be productive.
 
+I have to seriously re-think the way I spend time on my other
+computer. Working only on a tty is completely calming experience,
+there are no ads, no pressure, only code and text.
+
+I will keep working on it to improve the tty experience, and I will
+actively work on reducing my dependency on the modern web, e.g. use
+`go doc` more than google, build local search indexes etc. I hope to
+will some of it to my daily work life.
+
 # Why
 
 Now (covid19) it is incredibly hard for me to disconnect from work, we
@@ -344,7 +353,7 @@ index d54a549c5892..9b26dec762dd 100644
 @@ -71,6 +72,45 @@ sel_pos(int n, bool unicode)
  	return inverse_translate(vc_sel.cons, screen_glyph(vc_sel.cons, n), 0);
  }
- 
+
 +/**
 + *	copy_selection_to_user		-	get current selection
 + *
@@ -407,7 +416,7 @@ index 5b890ef5b59f..7cb971795013 100644
 +++ b/include/linux/selection.h
 @@ -15,6 +15,7 @@ struct tty_struct;
  struct vc_data;
- 
+
  extern void clear_selection(void);
 +extern int copy_selection_to_user(char __user *arg);
  extern int set_selection_user(const struct tiocl_selection __user *sel,
@@ -419,11 +428,11 @@ index b32acc229024..055ebda041d4 100644
 +++ b/include/uapi/linux/tiocl.h
 @@ -20,6 +20,7 @@ struct tiocl_selection {
  };
- 
+
  #define TIOCL_PASTESEL	3	/* paste previous selection */
 +#define TIOCL_GETSEL	18	/* get current selection */
  #define TIOCL_UNBLANKSCREEN	4	/* unblank screen */
- 
+
  #define TIOCL_SELLOADLUT	5
 
 ---
@@ -540,18 +549,18 @@ index bb6ae995c2e5..721f326b01e6 100644
 --- a/drivers/video/fbdev/core/fbcon.c
 +++ b/drivers/video/fbdev/core/fbcon.c
 @@ -173,7 +173,7 @@ static const struct consw fb_con;
- 
+
  static int fbcon_set_origin(struct vc_data *);
- 
+
 -static int fbcon_cursor_noblink;
 +static int fbcon_cursor_noblink = 1;
- 
+
  #define divides(a, b)	((!(a) || (b)%(a)) ? 0 : 1)
- 
+
 @@ -3527,13 +3527,8 @@ static ssize_t store_cursor_blink(struct device *device,
- 
+
  	blink = simple_strtoul(buf, last, 0);
- 
+
 -	if (blink) {
 -		fbcon_cursor_noblink = 0;
 -		fbcon_add_cursor_timer(info);
@@ -561,7 +570,7 @@ index bb6ae995c2e5..721f326b01e6 100644
 -	}
 +	fbcon_cursor_noblink = 1;
 +	fbcon_del_cursor_timer(info);
- 
+
  err:
  	console_unlock();
 diff --git a/include/linux/console_struct.h b/include/linux/console_struct.h
@@ -571,12 +580,12 @@ index 24d4c16e3ae0..b21061f8aad7 100644
 @@ -166,7 +166,7 @@ extern void vc_SAK(struct work_struct *work);
  #define CUR_HWMASK	0x0f
  #define CUR_SWMASK	0xfff0
- 
+
 -#define CUR_DEFAULT CUR_UNDERLINE
 +#define CUR_DEFAULT CUR_BLOCK
- 
+
  bool con_is_visible(const struct vc_data *vc);
- 
+
 
 ---
 
@@ -593,9 +602,14 @@ like meditation for the eyes.
 
 Conclusion:
 
-I have to seriously re-think the way I spend time on my other computer.
-Working only on a tty is completely calming experience, there are no
-ads, no pressure, only code and text.
+I have to seriously re-think the way I spend time on my other
+computer. Working only on a tty is completely calming experience,
+there are no ads, no pressure, only code and text.
+
+I will keep working on it to improve the tty experience, and I will
+actively work on reducing my dependency on the modern web, e.g. use
+`go doc` more than google, build local search indexes etc. I hope to
+will some of it to my daily work life.
 
 
 PS:
