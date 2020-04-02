@@ -1,0 +1,26 @@
+Copy-Paste between machines
+
+Sometimes I need to copy paste between the laptops, and I decided to
+use berserk.red and `go install github.com/jackdoe/updown/cmd/encrypt`
+to share an encrypted file:
+
+make some key `echo $RANDOM > ~/.key && chmod 0600 ~/.key`, then
+create rput and rget functions in zsh
+
+rput() {
+    encrypt -k ~/.key | ssh berserk.red -- bash -c 'cat > private/.clip' 2>&1 > /dev/null
+}
+
+rget() {
+    ( ssh berserk.red -- cat private/.clip ) | encrypt -d -k ~/.key
+}
+
+
+from the other machine I just do
+$ echo whoaaaa | rput
+
+On the other one you can run 'rget | copy' and get the content in my
+clipboard (after you copy the .key file of course)
+
+--
+github.com/jackdoe Thu  2 Apr 18:30:42 CEST 2020
