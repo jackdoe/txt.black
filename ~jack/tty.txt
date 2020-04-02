@@ -2,9 +2,9 @@ Coding from the TTY for a week.
 
 # TLDR
 
-I used only the tty for 7 nights. It was relaxing, and now I go back
-to it every time I am overwhelmed. Browsing was OK, I was able to
-navigate go/kernel documentation and be productive.
+I used only the tty (no X installed) for 5 nights. It was relaxing,
+and now I go back to it every time I am overwhelmed. Browsing was OK,
+I was able to navigate go/kernel documentation and be productive.
 
 I have to seriously re-think the way I spend time on my other
 computer. Working only on a tty is completely calming experience,
