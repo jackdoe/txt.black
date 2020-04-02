@@ -13,7 +13,7 @@ there are no ads, no pressure, only code and text.
 I will keep working on it to improve the tty experience, and I will
 actively work on reducing my dependency on the modern web, e.g. use
 `go doc` more than google, build local search indexes etc. I hope to
-will some of it to my daily work life.
+bring some of it to my daily work life.
 
 # Why
 
